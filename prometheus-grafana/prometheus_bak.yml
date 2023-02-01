@@ -1,0 +1,70 @@
+# global:
+#   scrape_interval: 15s
+#   evaluation_interval: 15s
+
+# rule_files:
+#   # - "first.rules"
+#   # - "second.files"
+
+# scrape_configs:
+#   - job_name: 'prometheus'
+#     static_configs:
+#       - targets: ['127.0.0.1:9095']
+
+#   - job_name: 'spring-actuator'
+#     metrics_path: '/actuator/prometheus'
+#     scrape_interval: 5s
+#     static_configs:
+#       - targets: ['127.0.0.1:8989']
+
+# my global config
+global:
+  scrape_interval: 15s 	
+  evaluation_interval: 15s 	
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'edureka-microservices-project'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  - 'alert.rules'
+
+# alert
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets: ['127.0.0.1:9093']   #      - "127.0.0.1:9093"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  - job_name: 'prometheus'
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['127.0.0.1:9095']
+
+  - job_name: 'BOOKMS'  #  'API-GATEWAY'    #  'spring-actuator'http://localhost:8097/actuator/prometheus
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['127.0.0.1:8097']
+
+  # - job_name: 'ISSUERMS'  #  'API-GATEWAY'    #  'spring-actuator'
+  #   metrics_path: '/actuator/prometheus'
+  #   scrape_interval: 5s
+  #   static_configs:
+  #     - targets: [ '127.0.0.1:8099' ]
+
+  # - job_name: 'prometheus'
+  #   static_configs:
+  #     - targets: ['127.0.0.1:9095']
+
+  # - job_name: 'spring-actuator'
+  #   metrics_path: '/actuator/prometheus'
+  #   scrape_interval: 5s
+  #   static_configs:
+  #     - targets: ['127.0.0.1:8989']

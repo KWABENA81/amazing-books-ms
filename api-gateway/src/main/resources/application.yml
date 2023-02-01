@@ -1,0 +1,102 @@
+server:
+  port: 8181
+
+spring:
+  application:
+    name: API-GATEWAY
+  ##  API GATEWAY CONFIGURATION
+  cloud:
+    gateway:
+      discovery.locator:
+        enabled: false
+        lowerCaseServiceId: true
+      routes:
+        - id: BOOKMS
+          uri: lb://BOOKMS       #uri: http://localhost:8097/       #
+          predicates:
+            - Path= /book/**
+            - Method= GET,POST,DELETE
+          filters:
+            #            - StripPrefix=1
+            #            - name: CircuitBreaker
+            #              args:
+            #                name: bookms
+            #                fallbackuri: forward:/bookFallBack
+            - RewritePath= /book/(?<path>.*), /$\{path}  # /dummy-bookms/(?<path>.*), /$\{path}
+
+        - id: ISSUERMS
+          uri: lb://ISSUERMS     #uri: http://localhost:8099/      #
+          predicates:
+            - Path= /issuer/**
+            - Method= GET,POST,DELETE
+          filters:
+            #            - StripPrefix=1
+            #            - name: CircuitBreaker
+            #              args:
+            #                name: issuerms
+            #                fallbackuri: forward:/issuerFallBack
+            - RewritePath= /issuer/(?<path>.*), /$\{path}  # /dummy-issuerms/(?<path>.*), /$\{path}
+
+        - id: OAUTH2-SERVER
+          uri: lb://OAUTH2-SERVER     #uri: http://localhost:9195/      #
+          predicates:
+            - Path= /oauth2-server/**
+            - Method= GET,POST,DELETE
+          filters:
+            #            - StripPrefix=1
+            #            - name: CircuitBreaker
+            #              args:
+            #                name: issuerms
+            #                fallbackuri: forward:/issuerFallBack
+            - RewritePath= /oauth2-server/(?<path>.*), /$\{path}  # /dummy-oauth2-server/(?<path>.*), /$\{path}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka    #${EUREKA_URI:http://localhost:8761/eureka}
+    healthcheck:
+      enabled: true
+  instance:
+    hostname: localhost
+
+# info endpoints configuration
+info:
+  app:
+    name: ${project.name}
+    description: ${project.description}
+    version: ${project.version}
+    encoding: ${project.build.sourceEncoding}
+    java:
+      version: ${java.version}
+
+# logging
+logging:
+  file:
+    path: /tmp/log
+
+management:
+  endpoint:
+    #   shutdown:
+    #     enabled: true
+    #   metrics:
+    #     enabled: true
+    #   prometheus:
+    #     enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        # hystrix.stream, prometheus, health, info, mappings, env, auditevents, shutdown, *
+#  metrics:
+#    export:
+#      prometheus:
+#        enabled: true
+
+
+
+
+
