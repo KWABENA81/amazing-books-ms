@@ -1,9 +1,25 @@
 server:
   port: 8181
 
+  error:
+    path: /error
+    whitelabel:
+      enabled: false
+
 spring:
   application:
     name: API-GATEWAY
+
+  main:
+    web-application-type: reactive
+
+  security:
+    enabled: true
+    user:
+      name: Edureka
+      password: password  #$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
+      roles: USER, ADMIN
+
   ##  API GATEWAY CONFIGURATION
   cloud:
     gateway:
@@ -11,44 +27,47 @@ spring:
         enabled: false
         lowerCaseServiceId: true
       routes:
-        - id: BOOKMS
-          uri: lb://BOOKMS       #uri: http://localhost:8097/       #
+        - id: BOOK-MICROSERVICE
+          uri: lb://BOOK-MICROSERVICE       #uri: http://localhost:8097/       #
           predicates:
-            - Path= /book/**
-            - Method= GET,POST,DELETE
+            - Path=/book/**
+            - Method=GET,POST,DELETE
           filters:
+            - RewritePath=/book/(?<path>.*), /$\{path}
+            # - RewritePath=/book/(?<path>.*), /$\{path}  # /dummy-bookms/(?<path>.*), /$\{path}
             #            - StripPrefix=1
             #            - name: CircuitBreaker
             #              args:
-            #                name: bookms
+            #                name: BOOK-MICROSERVICE
             #                fallbackuri: forward:/bookFallBack
-            - RewritePath= /book/(?<path>.*), /$\{path}  # /dummy-bookms/(?<path>.*), /$\{path}
 
-        - id: ISSUERMS
-          uri: lb://ISSUERMS     #uri: http://localhost:8099/      #
+        - id: ISSUER-MICROSERVICE
+          uri: lb://ISSUER-MICROSERVICE     #uri: http://localhost:8099/      #
           predicates:
-            - Path= /issuer/**
-            - Method= GET,POST,DELETE
+            - Path=/issuer/**
+            - Method=GET,POST,DELETE
           filters:
+            - RewritePath=/issuer/(?<path>.*), /$\{path}
+            # - RewritePath=/issuer/(?<path>.*), /$\{path}  # /dummy-issuerms/(?<path>.*), /$\{path}
             #            - StripPrefix=1
             #            - name: CircuitBreaker
             #              args:
-            #                name: issuerms
+            #                name: ISSUER-MICROSERVICE
             #                fallbackuri: forward:/issuerFallBack
-            - RewritePath= /issuer/(?<path>.*), /$\{path}  # /dummy-issuerms/(?<path>.*), /$\{path}
 
-        - id: OAUTH2-SERVER
-          uri: lb://OAUTH2-SERVER     #uri: http://localhost:9195/      #
+        - id: OAUTH2-SERVICE
+          uri: lb://OAUTH2-SERVICE     #uri: http://localhost:9195/      #
           predicates:
-            - Path= /oauth2-server/**
-            - Method= GET,POST,DELETE
+            - Path=/oauth2-service/**
+            - Method=GET,POST
           filters:
-            #            - StripPrefix=1
-            #            - name: CircuitBreaker
-            #              args:
-            #                name: issuerms
-            #                fallbackuri: forward:/issuerFallBack
-            - RewritePath= /oauth2-server/(?<path>.*), /$\{path}  # /dummy-oauth2-server/(?<path>.*), /$\{path}
+            - RewritePath=/oauth2-service/(?<path>.*), /$\{path}
+            #- RewritePath=/oauth2-service/(?<path>.*), /$\{path}  # /dummy-oauth2-service/(?<path>.*), /$\{path}
+#            - StripPrefix=1
+#            - name: CircuitBreaker
+#              args:
+#              name: OAUTH2-SERVICE
+#              fallbackuri: forward:/oauthFallBack
 
 eureka:
   client:
@@ -74,27 +93,26 @@ info:
 # logging
 logging:
   file:
-    path: /tmp/log
+    path: tmp/log
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
 
 management:
-  endpoint:
-    #   shutdown:
-    #     enabled: true
-    #   metrics:
-    #     enabled: true
-    #   prometheus:
-    #     enabled: true
-    health:
-      show-details: always
   endpoints:
     web:
       exposure:
-        include: '*'
-        # hystrix.stream, prometheus, health, info, mappings, env, auditevents, shutdown, *
-#  metrics:
-#    export:
-#      prometheus:
-#        enabled: true
+        include:  [ "health","prometheus","metrics","gateway","hystrix.stream","mappings","traces"] #'*'
+      base-path: /actuator
+  endpoint:
+    #   shutdown:
+    #     enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
 
 
 

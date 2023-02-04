@@ -35,10 +35,6 @@ spring:
       hibernate:
         format_sql: true
 
-#  mvc:
-#    pathmatch:
-#      matching-strategy:  ant_path_matcher
-
   security:
     enabled: true
     user:
@@ -51,28 +47,6 @@ spring:
         jwt:
           issuer-uri: https://idp.example.com/issuer
           jwk-set-uri: https://idp.example.com/.well-known/jwks.json
-
-#spring:
-#   devtools:
-#   add-properties: false
-#  security:
-#    enabled: true
-#    user:
-#      name: Edureka
-#      password: password
-#      roles: USER, ADMIN
-#    oauth2:
-#      resource-server:
-#        jwt:
-#          issuer-uri: "https://api.asgardeo.io/t/imeshaorg/oauth2/token"
-
-#    enabled: false
-##spring:
-#  autoconfigure:
-#    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
-#spring.
-#  autoconfigure:
-#    exclude: org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration
 
 app:
   security:
@@ -110,22 +84,48 @@ logging:
     path: /tmp/log
 
 management:
-  endpoint:
-#    shutdown:
-#      enabled: true
-#    metrics:
-#      enabled: true
-#    prometheus:
-#      enabled: true
-    health:
-      show-details: always
-      
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: [ "health","prometheus","metrics"]   #"*"
         #  prometheus, health, info, mappings, env, auditevents, shutdown, *
+      base-path: /actuator
+  endpoint:
+    #    shutdown:
+    #      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
 
+
+  #  mvc:
+  #    pathmatch:
+  #      matching-strategy:  ant_path_matcher
+
+  #spring:
+  #   devtools:
+  #   add-properties: false
+  #  security:
+  #    enabled: true
+  #    user:
+  #      name: Edureka
+  #      password: password
+  #      roles: USER, ADMIN
+  #    oauth2:
+  #      resource-server:
+  #        jwt:
+  #          issuer-uri: "https://api.asgardeo.io/t/imeshaorg/oauth2/token"
+
+  #    enabled: false
+  ##spring:
+  #  autoconfigure:
+  #    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  #spring.
+  #  autoconfigure:
+  #    exclude: org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration
 
   # Actuator endpoints for Circuit Breaker
   #management:    health:      circuitbreakers:        enabled: true

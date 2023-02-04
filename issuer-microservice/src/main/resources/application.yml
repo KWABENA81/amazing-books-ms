@@ -75,6 +75,22 @@ eureka:
 #    prefer-ip-address: false
 #    hostname: localhost
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "health","prometheus","metrics"]   #"*"
+        #  prometheus, health, info, mappings, env, auditevents, shutdown, *
+      base-path: /actuator
+  endpoint:
+    #    shutdown:
+    #      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
 
 # info endpoints configuration
 info:
@@ -91,20 +107,4 @@ logging:
   file:
     path: /tmp/log
 
-management:
-  endpoint:
-#    shutdown:
-#      enabled: true
-#    metrics:
-#      enabled: true
-#    prometheus:
-#      enabled: true
-    health:
-      show-details: always
-      
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-        # prometheus, health, info, mappings, env, auditevents, shutdown, *
 

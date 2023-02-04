@@ -7,21 +7,19 @@ volumes:
   graf-data: {
     #external: true
   }
-#  jmx-data: {
-  #   external: true
-  # }
 
 services:
+
   prometheus:
-    container_name: prometheus
+    container_name: prometheus-container
     image: prom/prometheus 
     volumes:
-      - ./prometheus:/etc/prometheus
-      - "prom-data:/var/lib/prometheus"
+      - ./prometheus/:/etc/prometheus/
+      - "prom-data/:/var/lib/prometheus/"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--config.file=/etc/prometheus/prometheus.yaml'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.listen-address=0.0.0.0:9095'
@@ -35,35 +33,28 @@ services:
   #  --- # restart: unless-stopped
 
   grafana:
-    container_name: grafana
+    container_name: grafana-container
     image: grafana/grafana
+    #user: "$UID:$GID"
     environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SERVER_DOMAIN: localhost
       GF_INSTALL_PLUGINS: 'grafana-clock-panel,grafana-simple-json-datasource'
     volumes:
-      - graf-data:/var/lib/grafana    
+      #- ./grafana/:/var/lib/grafana/
+      - "graf-data/:/var/lib/grafana/"    
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
     env_file:
       - ./grafana/config
     ports:
-      - "3033:3000"
+      - "3030:3000"
     networks:
       - microservice_net
     # ----restart: unless-stopped
     depends_on:
       - prometheus
-
-  # jmx_exporter:
-  #   container_name: jmx-prometheus-exporter
-  #   image: sscaling/jmx-prometheus-exporter
-  #   volumes:
-  #     - jmx-data:/opt/jmx_exporter
-  #     - "/etc/timezone:/etc/timezone:ro"
-  #     - "/etc/localtime:/etc/localtime:ro"
-  #   ports:
-  #     - "5556:5556"
-
 
 networks:
   microservice_net:

@@ -1,0 +1,16 @@
+scrape_configs:
+  - job_name: 'Spring Boot Application - Book-Microservice input'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:8097']
+        labels:
+          application: 'Book-Microservice'
+
+  - job_name: 'Spring Boot Application - Issuer-Microservice input'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:8099']
+        labels:
+          application: 'Issuer-Microservice'

@@ -1,0 +1,111 @@
+# main project docker-compose.yml
+version: '3.8'
+
+services:
+  eureka-server:
+    container_name: eureka-server
+    image: kwabena81/eureka-image:0.1
+    build: 
+      context: ./eureka-server   
+      dockerfile: Dockerfile 
+    hostname: EUREKA-SERVER
+    ports:
+      - '8761:8761'
+    expose:
+      - '8761'
+    networks:
+      - ms_networks
+    volumes: 
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro' 
+
+  oauth2:
+    container_name: oauth2
+    image: kwabena81/oauth2-image:0.1
+    build: 
+      context: ./oauth2   
+      dockerfile: Dockerfile 
+    hostname: OAUTH2-SERVER
+    ports:
+      - '9195:9195'
+    expose:
+      - '9195'
+    networks:
+      - ms_networks
+    volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+    depends_on:
+      - eureka-server
+
+  api-gateway:
+    container_name: api-gateway
+    image: kwabena81/api-gateway-image:0.1
+    build: 
+      context: ./api-gateway
+      dockerfile: Dockerfile 
+    hostname: API-GATEWAY
+    ports:
+      - '8181:8181'
+    expose:
+      - '8181'
+    networks:
+      - ms_networks
+    volumes: 
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro' 
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+    depends_on:
+      - eureka-server
+
+  bookms:
+    container_name: bookms
+    image: kwabena81/bookms-image:0.1
+    build: 
+      context: ./bookms   
+      dockerfile: Dockerfile 
+    hostname: BOOKMS
+    ports:
+      - '8097:8097'
+    expose:
+      - '8097'
+    networks:
+      - ms_networks
+    volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+    depends_on:
+      - eureka-server
+
+
+networks:
+  ms_networks:
+    name: ms_networks
+    driver: bridge
+
+
+
+  # issuerms:
+  #   container_name: issuerms
+  #   build: 
+  #     context: ./issuerms   
+  #     dockerfile: Dockerfile 
+  #   environment:
+  #     - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+  #   depends_on:
+  #     - eureka-server
+  #   ports:
+  #     - '8099:8099'
+  #   networks:
+  #         - ms_networks
+  #   volumes:
+  #     - '/etc/timezone:/etc/timezone:ro'
+  #     - '/etc/localtime:/etc/localtime:ro'
+
+
+
