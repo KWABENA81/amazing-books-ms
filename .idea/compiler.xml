@@ -2,23 +2,33 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
         <module name="api-gateway" />
+        <module name="issuer-microservice" />
+        <module name="oauth2-service" />
+        <module name="book-microservice" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api-gateway" target="11" />
+      <module name="book-microservice" target="11" />
       <module name="eureka-service" target="11" />
+      <module name="issuer-microservice" target="11" />
+      <module name="oauth2-service" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="book-microservice" options="-parameters" />
       <module name="eureka-service" options="-parameters" />
+      <module name="issuer-microservice" options="-parameters" />
+      <module name="oauth2-service" options="-parameters" />
     </option>
   </component>
 </project>
