@@ -21,4 +21,8 @@ eureka:
 # logging
 logging:
   file:
-    path: /tmp/log
+    path:  logs/log-${spring.application.name}
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+    org.springframework.security: DEBUG

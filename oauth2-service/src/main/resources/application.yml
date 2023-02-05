@@ -1,14 +1,8 @@
 
 server:
   port: 9195
-#  servlet:
-#    context-path:
 
 spring:
-  #  h2:
-  #    console:
-  #      enabled: true
-  #
   application:
     name: OAUTH2-SERVICE
     servlet:
@@ -28,16 +22,6 @@ spring:
           issuer-uri: https://idp.example.com/issuer
           jwk-set-uri: https://idp.example.com/.well-known/jwks.json
 
-#  main:
-#    allow-bean-definition-overriding: true
-
-#eureka:
-#  instance:
-#    hostname: localhost
-#    port: 8761
-#  client:
-#    serviceUrl:
-#      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
 eureka:
   client:
     register-with-eureka: true
@@ -53,14 +37,14 @@ eureka:
     preferIpAddress: false
     hostname: localhost
 
-# logging:
+# logging
 logging:
-  level:
-    org.springframework.security: DEBUG
   file:
-    path: /tmp/log
-
-
+    path: logs/log-${spring.application.name}
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+    org.springframework.security: DEBUG
 
 #    oauth2:
 #      client:
