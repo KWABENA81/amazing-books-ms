@@ -3,7 +3,7 @@ server:
   port: 8761
 spring:
   application:
-    name: EUREKA-SERVER
+    name: EUREKA-SERVICE
 eureka:
   instance:
     hostname: localhost
@@ -12,8 +12,8 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://localhost:8761/eureka
-      #defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+      #defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   server:
     enable-self-preservation: true
     wait-time-in-ms-when-sync-empty: 0
@@ -21,7 +21,7 @@ eureka:
 # logging
 logging:
   file:
-    path:  logs/log-${spring.application.name}
+    path:  logs/${spring.application.name}-logs
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG

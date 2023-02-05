@@ -25,7 +25,7 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: false
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     show-sql: true
@@ -33,10 +33,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        
-#  mvc:
-#    pathmatch:
-#      matching-strategy: ant_path_matcher
 
   security:
     enabled: true
@@ -50,10 +46,6 @@ spring:
         jwt:
           issuer-uri: https://idp.example.com/issuer
           jwk-set-uri: https://idp.example.com/.well-known/jwks.json
-
-#  #spring:
-#  autoconfigure:
-#    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
 app:
   security:
@@ -79,12 +71,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: [ "health","prometheus","metrics"]   #"*"
-        #  prometheus, health, info, mappings, env, auditevents, shutdown, *
+        include: [ "health","prometheus","metrics","info"]
       base-path: /actuator
   endpoint:
-    #    shutdown:
-    #      enabled: true
     metrics:
       enabled: true
     prometheus:
@@ -105,5 +94,10 @@ info:
 # logging
 logging:
   file:
-    path:  logs/log-${spring.application.name}
+    path:  logs/${spring.application.name}-logs
 
+
+
+#  #spring:
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration

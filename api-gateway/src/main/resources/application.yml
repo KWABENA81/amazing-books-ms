@@ -28,54 +28,53 @@ spring:
         lowerCaseServiceId: true
       routes:
         - id: BOOK-MICROSERVICE
-          uri: lb://BOOK-MICROSERVICE       #uri: http://localhost:8097/       #
+          uri: lb://BOOK-MICROSERVICE
           predicates:
-            - Path=/book/**
-            - Method=GET,POST,DELETE
+          - Path=/api/book/**
+          - Method=GET,POST,DELETE
           filters:
-            - RewritePath=/book/(?<path>.*), /$\{path}
-            - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                value: BOOK-MICROSERVICE
-                fallbackuri: forward:/bookFallBack
-            # - RewritePath=/book/(?<path>.*), /$\{path}  # /dummy-bookms/(?<path>.*), /$\{path}
-
+          - RewritePath=/api(?<segment>/?.*), $\{segment}
+          - RedirectTo=302, /error
+          - SetPath=/book
+          - name: CircuitBreaker
+            args:
+              name: CircuitBreaker
+              fallbackUri: forward:/bookFallBack
 
         - id: ISSUER-MICROSERVICE
-          uri: lb://ISSUER-MICROSERVICE     #uri: http://localhost:8099/      #
+          uri: lb://ISSUER-MICROSERVICE
           predicates:
-            - Path=/issuer/**
-            - Method=GET,POST,DELETE
+          - Path=/api/issuer/**
+          - Method=GET,POST,DELETE
           filters:
-            - RewritePath=/issuer/(?<path>.*), /$\{path}
-            # - RewritePath=/issuer/(?<path>.*), /$\{path}  # /dummy-issuerms/(?<path>.*), /$\{path}
-            #            - StripPrefix=1
-            #            - name: CircuitBreaker
-            #              args:
-            #                name: ISSUER-MICROSERVICE
-            #                fallbackuri: forward:/issuerFallBack
+          - RewritePath=/api(?<segment>/?.*), $\{segment}
+          - RedirectTo=302, /error
+          - SetPath=/issuer
+          - name: CircuitBreaker
+            args:
+              name: CircuitBreaker
+              fallbackUri: forward:/issuerFallBack
 
         - id: OAUTH2-SERVICE
-          uri: lb://OAUTH2-SERVICE     #uri: http://localhost:9195/      #
+          uri: lb://OAUTH2-SERVICE
           predicates:
-            - Path=/oauth2-service/**
-            - Method=GET,POST
+          - Path=/api/oauth2/**
+          - Method=GET,POST
           filters:
-            - RewritePath=/oauth2-service/(?<path>.*), /$\{path}
-            #- RewritePath=/oauth2-service/(?<path>.*), /$\{path}  # /dummy-oauth2-service/(?<path>.*), /$\{path}
-#            - StripPrefix=1
-#            - name: CircuitBreaker
-#              args:
-#              name: OAUTH2-SERVICE
-#              fallbackuri: forward:/oauthFallBack
+          - RewritePath=/api(?<segment>/?.*), $\{segment}
+          - RedirectTo=302, /error
+          - SetPath=/oauth2
+          - name: CircuitBreaker
+            args:
+              name: CircuitBreaker
+              fallbackUri: forward:/oauth2FallBack
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka    #${EUREKA_URI:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}    #http://localhost:8761/eureka
     healthcheck:
       enabled: true
   instance:
@@ -94,7 +93,7 @@ info:
 # logging
 logging:
   file:
-    path:  logs/log-${spring.application.name}
+    path:  logs/${spring.application.name}-logs
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
@@ -103,7 +102,7 @@ management:
   endpoints:
     web:
       exposure:
-        include:  [ "health","prometheus","metrics","gateway","hystrix.stream","mappings","traces"] #'*'
+        include:  [ "health","prometheus","metrics","gateway","hystrix","mappings","traces"] #'*'
       base-path: /actuator
   endpoint:
     #   shutdown:

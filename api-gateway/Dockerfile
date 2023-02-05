@@ -13,7 +13,7 @@ LABEL Description="api-gateway Server" Version="${VERSION}"
 
 VOLUME /tmp
 
-ADD target/api-gateway-${VERSION}-SNAPSHOT.jar gateway-app.jar
+ADD target/api-gateway-"${VERSION}"-SNAPSHOT.jar gateway-app.jar
 
 #
 RUN sh -c 'touch /gateway-app.jar'
@@ -22,4 +22,3 @@ EXPOSE 8181
 
 #   entrypoint
 ENTRYPOINT ["java", "-jar", "/gateway-app.jar"]
-

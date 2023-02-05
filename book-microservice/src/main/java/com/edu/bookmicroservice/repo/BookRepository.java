@@ -1,4 +1,4 @@
-package com.edu.bookmicroservice;
+package com.edu.bookmicroservice.repo;
 
 import com.edu.bookmicroservice.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;

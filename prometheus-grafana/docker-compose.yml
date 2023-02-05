@@ -58,8 +58,7 @@ services:
 
 networks:
   microservice_net:
-    name: custom_network
-    # external: true
-    # driver: bridge
+    name: microservice_net
+    driver: bridge
 
 
