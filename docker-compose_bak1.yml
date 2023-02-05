@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  prometheus:
+    container_name: prometheus_container
+    image: prom/prometheus 
+    volumes:
+      - "/etc/prometheus:/etc/prometheus"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "9095:9090"
+    restart: unless-stopped
+
+  grafana:
+    container_name: grafana_container
+    image: grafana/grafana
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "3030:3000"
+    restart: unless-stopped
+    depends_on:
+      - prometheus
