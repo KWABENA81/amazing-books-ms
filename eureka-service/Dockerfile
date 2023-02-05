@@ -13,7 +13,7 @@ LABEL Description="Eureka Server" Version="${VERSION}"
 
 VOLUME /tmp
 
-ADD target/eureka-service-${VERSION}-SNAPSHOT.jar eureka-server-app.jar
+ADD target/eureka-service-"${VERSION}"-SNAPSHOT.jar eureka-server-app.jar
 
 #
 RUN sh -c 'touch /eureka-server-app.jar'

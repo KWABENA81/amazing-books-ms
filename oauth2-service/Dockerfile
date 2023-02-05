@@ -12,7 +12,7 @@ LABEL Description="Oauth2 Service" Version="${VERSION}"
 
 VOLUME /tmp
 
-ADD target/oauth2-service-${VERSION}-SNAPSHOT.jar oauth2-server-app.jar
+ADD target/oauth2-service-"${VERSION}"-SNAPSHOT.jar oauth2-server-app.jar
 
 #
 RUN sh -c 'touch /oauth2-server-app.jar'

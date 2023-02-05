@@ -1,17 +1,18 @@
-cd ~/Documents/edureka/edureka-ms-cert/eureka-server
-docker build -t kwabena81/eureka-image:0.1 .
+cd ~/Documents/edureka/book-issuer-ms/eureka-service && mvn clean install
+docker build -t kwabena81/eureka-image:0.0.1 .
 
-cd ~/Documents/edureka/edureka-ms-cert/oauth2
-docker build -t kwabena81/oauth2-image:0.1 .
+cd ~/Documents/edureka/book-issuer-ms/oauth2-service && mvn clean install
+docker build -t kwabena81/oauth2-image:0.0.1 .
 
-cd ~/Documents/edureka/edureka-ms-cert/api-gateway
-docker build -t kwabena81/api-gateway-image:0.1 .
+cd ~/Documents/edureka/book-issuer-ms/api-gateway && mvn clean install
+docker build -t kwabena81/api-gateway-image:0.0.1 .
 
-cd ~/Documents/edureka/edureka-ms-cert/bookms
-docker build -t kwabena81/bookms-image:0.1 .
+cd ~/Documents/edureka/book-issuer-ms/book-microservice && mvn clean install
+docker build -t kwabena81/bookms-image:0.0.1 .
 
-cd ~/Documents/edureka/edureka-ms-cert
+cd ~/Documents/edureka/book-issuer-ms/issuer-microservice && mvn clean install
+docker build -t kwabena81/issuerms-image:0.0.1 .
+
+cd ~/Documents/edureka/book-issuer-ms
 docker-compose up
-
-
 

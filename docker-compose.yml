@@ -2,47 +2,47 @@
 version: '3.8'
 
 services:
-  eureka-server:
-    container_name: eureka-server
-    image: kwabena81/eureka-image:0.1
+  eureka-service:
+    container_name: eureka-container
+    image: kwabena81/eureka-image:0.0.1
     build: 
-      context: ./eureka-server   
+      context: ./eureka-service
       dockerfile: Dockerfile 
-    hostname: EUREKA-SERVER
+    hostname: EUREKA-SERVICE
     ports:
       - '8761:8761'
     expose:
       - '8761'
     networks:
-      - ms_networks
+      - microservice_net
     volumes: 
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro' 
 
-  oauth2:
-    container_name: oauth2
-    image: kwabena81/oauth2-image:0.1
+  oauth2-service:
+    container_name: oauth2-container
+    image: kwabena81/oauth2-image:0.0.1
     build: 
-      context: ./oauth2   
+      context: ./oauth2-service
       dockerfile: Dockerfile 
-    hostname: OAUTH2-SERVER
+    hostname: OAUTH2-SERVICE
     ports:
       - '9195:9195'
     expose:
       - '9195'
     networks:
-      - ms_networks
+      - microservice_net
     volumes:
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
     environment:
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - eureka.client.service-url.defaultZone=http://EUREKA-SERVICE:8761/eureka
     depends_on:
-      - eureka-server
+      - eureka-service
 
   api-gateway:
     container_name: api-gateway
-    image: kwabena81/api-gateway-image:0.1
+    image: kwabena81/api-gateway-image:0.0.1
     build: 
       context: ./api-gateway
       dockerfile: Dockerfile 
@@ -52,60 +52,65 @@ services:
     expose:
       - '8181'
     networks:
-      - ms_networks
+      - microservice_net
     volumes: 
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro' 
     environment:
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - eureka.client.service-url.defaultZone=http://EUREKA-SERVICE:8761/eureka
     depends_on:
-      - eureka-server
+      - oauth2-service
 
-  bookms:
-    container_name: bookms
-    image: kwabena81/bookms-image:0.1
+  book-microservice:
+    container_name: book-container
+    image: kwabena81/bookms-image:0.0.1
     build: 
-      context: ./bookms   
+      context: ./book-microservice
       dockerfile: Dockerfile 
-    hostname: BOOKMS
+    hostname: BOOK-MICROSERVICE
     ports:
       - '8097:8097'
     expose:
       - '8097'
     networks:
-      - ms_networks
+      - microservice_net
     volumes:
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
     environment:
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - eureka.client.service-url.defaultZone=http://EUREKA-SERVICE:8761/eureka
     depends_on:
-      - eureka-server
+      - api-gateway
 
+  issuer-microservice:
+    container_name: issuer-container
+    image: kwabena81/issuerms-image:0.0.1
+    build:
+      context: ./issuer-microservice
+      dockerfile: Dockerfile
+    hostname: ISSUER-MICROSERVICE
+    ports:
+      - '8099:8099'
+    expose:
+      - '8099'
+    networks:
+      - microservice_net
+    volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    environment:
+      - eureka.client.service-url.defaultZone=http://EUREKA-SERVICE:8761/eureka
+    depends_on:
+      - api-gateway
 
 networks:
-  ms_networks:
-    name: ms_networks
+  microservice_net:
+    name: microservice_net
     driver: bridge
 
 
 
-  # issuerms:
-  #   container_name: issuerms
-  #   build: 
-  #     context: ./issuerms   
-  #     dockerfile: Dockerfile 
-  #   environment:
-  #     - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
-  #   depends_on:
-  #     - eureka-server
-  #   ports:
-  #     - '8099:8099'
-  #   networks:
-  #         - ms_networks
-  #   volumes:
-  #     - '/etc/timezone:/etc/timezone:ro'
-  #     - '/etc/localtime:/etc/localtime:ro'
+
 
 
 
