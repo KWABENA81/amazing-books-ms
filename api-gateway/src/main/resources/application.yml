@@ -34,12 +34,13 @@ spring:
             - Method=GET,POST,DELETE
           filters:
             - RewritePath=/book/(?<path>.*), /$\{path}
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                value: BOOK-MICROSERVICE
+                fallbackuri: forward:/bookFallBack
             # - RewritePath=/book/(?<path>.*), /$\{path}  # /dummy-bookms/(?<path>.*), /$\{path}
-            #            - StripPrefix=1
-            #            - name: CircuitBreaker
-            #              args:
-            #                name: BOOK-MICROSERVICE
-            #                fallbackuri: forward:/bookFallBack
+
 
         - id: ISSUER-MICROSERVICE
           uri: lb://ISSUER-MICROSERVICE     #uri: http://localhost:8099/      #
@@ -93,7 +94,7 @@ info:
 # logging
 logging:
   file:
-    path: tmp/log
+    path:  logs/log-${spring.application.name}
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG

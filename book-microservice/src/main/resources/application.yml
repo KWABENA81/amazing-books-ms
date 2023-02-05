@@ -26,7 +26,7 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: false
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     show-sql: true
@@ -81,7 +81,7 @@ info:
 # logging
 logging:
   file:
-    path: /tmp/log
+    path:  logs/log-${spring.application.name}
 
 management:
   endpoints:
@@ -91,8 +91,6 @@ management:
         #  prometheus, health, info, mappings, env, auditevents, shutdown, *
       base-path: /actuator
   endpoint:
-    #    shutdown:
-    #      enabled: true
     metrics:
       enabled: true
     prometheus:

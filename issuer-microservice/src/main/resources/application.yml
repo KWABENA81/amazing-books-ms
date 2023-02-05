@@ -105,6 +105,5 @@ info:
 # logging
 logging:
   file:
-    path: /tmp/log
-
+    path:  logs/log-${spring.application.name}
 
