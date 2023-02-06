@@ -25,15 +25,16 @@ public class Book {
     @Column(name = "title", nullable = false, length = 45)
     private String title;
 
-    @Column(name = "author", nullable = false, length = 145)
-    private String author;
-
     @Column(name = "published_date", nullable = false)
     private LocalDate publishedDate = LocalDate.now();
 
-    @Column(name = "issuer_id")
-    private Long issuerId;
-
     @Column(name = "total_copies")
     private Integer totalCopies;
+
+    @Column(name = "issued_copies")
+    private Integer issuedCopies;
+
+    @Column(name = "author", nullable = false, length = 145)
+    private String author;
+
 }

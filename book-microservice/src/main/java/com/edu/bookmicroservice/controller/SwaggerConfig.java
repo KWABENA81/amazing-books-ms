@@ -1,4 +1,4 @@
-package com.edu.bookmicroservice;
+package com.edu.bookmicroservice.controller;
 
 
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
@@ -34,9 +34,9 @@ public class SwaggerConfig {
 
     @Bean
     public Docket docket() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("book-api")
+        return new Docket(DocumentationType.SWAGGER_2).groupName("book-controller")
                 .apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.edu.bookms"))
+                .apis(RequestHandlerSelectors.basePackage("com.edu.bookmicroservice.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

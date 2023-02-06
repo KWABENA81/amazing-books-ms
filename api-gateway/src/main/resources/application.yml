@@ -105,14 +105,17 @@ management:
         include:  [ "health","prometheus","metrics","gateway","hystrix","mappings","traces"] #'*'
       base-path: /actuator
   endpoint:
-    #   shutdown:
-    #     enabled: true
     metrics:
       enabled: true
     prometheus:
       enabled: true
     health:
       show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 
 
 

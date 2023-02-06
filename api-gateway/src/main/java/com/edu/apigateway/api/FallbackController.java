@@ -1,4 +1,4 @@
-package com.edu.apigateway;
+package com.edu.apigateway.api;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;

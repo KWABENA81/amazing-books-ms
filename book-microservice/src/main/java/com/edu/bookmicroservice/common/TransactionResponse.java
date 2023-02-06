@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 public class TransactionResponse {
     private Book book;
     private String customerInfo;
-    private String issuerStatus;
+    private String issuanceStatus;
     private String issuerTransactionId;
     private String message;
 }
-
-//( issuerId, customerInfo, isbn, noOfCopies, issuerStatus, issuerTransactionId)

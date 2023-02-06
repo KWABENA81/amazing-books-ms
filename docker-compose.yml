@@ -41,7 +41,7 @@ services:
       - eureka-service
 
   api-gateway:
-    container_name: api-gateway
+    container_name: controller-gateway
     image: kwabena81/api-gateway-image:0.0.1
     build: 
       context: ./api-gateway

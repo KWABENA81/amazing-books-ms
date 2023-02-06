@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssuerRequest {
+public class IssuanceRequest {
     private Customer customer;
     private Issuer issuer;
 }
