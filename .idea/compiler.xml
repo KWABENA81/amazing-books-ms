@@ -18,6 +18,7 @@
       <module name="api-gateway" target="11" />
       <module name="book-microservice" target="11" />
       <module name="eureka-service" target="11" />
+      <module name="hystrix" target="11" />
       <module name="issuer-microservice" target="11" />
       <module name="oauth2-service" target="11" />
     </bytecodeTargetLevel>
@@ -27,6 +28,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="book-microservice" options="-parameters" />
       <module name="eureka-service" options="-parameters" />
+      <module name="hystrix" options="-parameters" />
       <module name="issuer-microservice" options="-parameters" />
       <module name="oauth2-service" options="-parameters" />
     </option>

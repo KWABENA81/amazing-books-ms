@@ -6,6 +6,7 @@ import com.edu.issuermicroservice.common.IssuanceResponse;
 import com.edu.issuermicroservice.exceptions.IssuerNotFoundExceptionResponseStatus;
 import com.edu.issuermicroservice.model.Issuer;
 import com.edu.issuermicroservice.service.IssuerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = {"${app.security.cors.origin}"})
 @Api(value = "Issuer Class", protocols = "http")
-@RequestMapping("/issuer")
+@RequestMapping("/issuers")
 public class IssuerController {
     @Autowired
     private IssuerService issuerService;
@@ -39,7 +40,7 @@ public class IssuerController {
     }
 
     @ApiOperation(value = "Fetch all Issuers", response = Issuer.class)
-    @GetMapping(path = "/issuers")
+    @GetMapping //(path = "/issuers")
     public ResponseEntity<List<Issuer>> issuers() {
         log.info("Start All Issuers retrieval");
         List<Issuer> issuers = issuerService.findAll().stream().collect(Collectors.toList());
@@ -112,6 +113,12 @@ public class IssuerController {
         } else
             log.info("Issuer with #id {} has been deleted", id);
     }
+
+    @GetMapping("/{isbn}")
+    public Issuer findIssuerByIsbn(@PathVariable String isbn) throws JsonProcessingException {
+        return issuerService.findIssuancesByIsbn(isbn);
+    }
+
 }
 
 

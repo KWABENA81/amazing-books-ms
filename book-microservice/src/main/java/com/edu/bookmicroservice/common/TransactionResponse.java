@@ -12,6 +12,6 @@ public class TransactionResponse {
     private Book book;
     private String customerInfo;
     private String issuanceStatus;
-    private String issuerTransactionId;
+    private String issuanceTransactionId;
     private String message;
 }

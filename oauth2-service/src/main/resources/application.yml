@@ -40,7 +40,7 @@ eureka:
 # logging
 logging:
   file:
-    path: logs/${spring.application.name}-logs
+    path: /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
