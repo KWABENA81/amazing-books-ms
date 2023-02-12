@@ -14,17 +14,27 @@ import org.springframework.web.reactive.function.client.WebClient;
 //@EnableWebSecurity
 public class BookMicroserviceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BookMicroserviceApplication.class, args);
-	}
-	@Bean
-	@LoadBalanced
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BookMicroserviceApplication.class, args);
 
-	@Bean
-	public WebClient webClient() {
-		return WebClient.builder().build();
-	}
+        //	Initial data load test
+		/*ConfigurableApplicationContext configurableApplicationContext = SpringApplication.run(BookMicroserviceApplication.class, args);
+        BookRepository bookRepository = configurableApplicationContext
+                .getBean(BookRepository.class);
+        Book book = new Book(111, "7y0opds5ts9",
+                "Animal Kingdom", LocalDate.now(),
+                12, 1, "John Smith");
+        bookRepository.save(book);*/
+    }
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder().build();
+    }
 }

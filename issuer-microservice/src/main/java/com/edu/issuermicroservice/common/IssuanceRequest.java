@@ -1,6 +1,5 @@
 package com.edu.issuermicroservice.common;
 
-import com.edu.issuermicroservice.model.Issuer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class IssuanceRequest {
     private Customer customer;
-    private Issuer issuer;
+    private Integer requestQty;
+    private String bookIsbn;
 }

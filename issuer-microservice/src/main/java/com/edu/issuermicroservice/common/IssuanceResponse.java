@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 
 @Data
 @NoArgsConstructor
@@ -15,5 +13,6 @@ import java.util.List;
 public class IssuanceResponse {
     private String customerInfo;
     private Issuer issuer;
-    private List<Book> books;
+    private Book book;
+    private String issuanceStatus;
 }

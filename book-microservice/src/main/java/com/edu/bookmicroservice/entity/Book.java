@@ -1,8 +1,9 @@
-package com.edu.bookmicroservice.model;
+package com.edu.bookmicroservice.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,28 +14,27 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "BOOK_TB")
 public class Book {
-
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private Integer id;
 
-    @Column(name = "isbn", nullable = false, length = 45)
+    @NonNull
     private String isbn;
 
-    @Column(name = "title", nullable = false, length = 45)
+    @NonNull
     private String title;
 
-    @Column(name = "published_date", nullable = false)
+    @NonNull
     private LocalDate publishedDate = LocalDate.now();
 
-    @Column(name = "total_copies")
+    @NonNull
     private Integer totalCopies;
 
-    @Column(name = "issued_copies")
+    @NonNull
     private Integer issuedCopies;
 
-    @Column(name = "author", nullable = false, length = 145)
+    @NonNull
     private String author;
+
 
 }

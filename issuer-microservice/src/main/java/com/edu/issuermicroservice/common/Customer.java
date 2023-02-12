@@ -10,4 +10,10 @@ import lombok.NoArgsConstructor;
 public class Customer {
     private String phone;
     private String email;
+
+    public String info() {
+        String info = (!this.phone.isEmpty())
+                ? this.phone : this.email;
+        return info;
+    }
 }
