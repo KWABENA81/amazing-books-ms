@@ -22,8 +22,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class BookService implements IBookService {
-    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuers/issuances/";
-    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuers/issuances/";
+    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuances/isbn/";
+    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuances/isbn/";
     @Autowired
     private BookRepository bookRepository;
 
@@ -72,11 +72,7 @@ public class BookService implements IBookService {
         return findById(book.getId()).map(bk -> {
                     //            if found
                     bk.setTotalCopies(book.getTotalCopies());
-                    bk.setTitle(book.getTitle());
-                    bk.setIsbn(book.getIsbn());
-                    bk.setPublishedDate(book.getPublishedDate());
                     bk.setIssuedCopies(book.getIssuedCopies());
-                    bk.setAuthor(book.getAuthor());
                     return bookRepository.save(bk);
                 })
                 .orElseGet(() -> null);

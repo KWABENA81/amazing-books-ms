@@ -20,20 +20,27 @@ spring:
     url: jdbc:h2:mem:issuerdb
     username: sa
     password: password
+  sql:
+    init:
+      mode: always
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
+    # DDL
+    generate-dll: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: true
     open-in-view: true
     properties:
       hibernate:
         format_sql: true
+        validator:
+          apply_to_ddl: true
   security:
     enabled: true
     user:
-      name: Edureka
+      name: User
       password: password  # $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
     oauth2:
@@ -58,15 +65,25 @@ eureka:
       #defaultZone: http://eureka-server:8761/eureka/
     healthcheck:
       enabled: true
-#  instance:
-#    prefer-ip-address: false
-#    hostname: localhost
+  instance:
+    prefer-ip-address: false
+    hostname: localhost
+
+# info endpoints configuration
+info:
+  app:
+    name: ${project.name}
+    description: ${project.description}
+    version: ${project.version}
+    encoding: ${project.build.sourceEncoding}
+    java:
+      version: ${java.version}
 
 management:
   endpoints:
     web:
       exposure:
-        include: [ "health","prometheus","metrics","info"]
+        include: ["health","prometheus","metrics","info"]
       base-path: /actuator
   endpoint:
     metrics:
@@ -80,23 +97,8 @@ management:
       prometheus:
         enabled: true
 
-# info endpoints configuration
-info:
-  app:
-    name: ${project.name}
-    description: ${project.description}
-    version: ${project.version}
-    encoding: ${project.build.sourceEncoding}
-    java:
-      version: ${java.version}
-
 # logging
 logging:
   file:
     path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
 
-
-
-#  #spring:
-#  autoconfigure:
-#    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration

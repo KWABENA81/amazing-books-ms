@@ -16,15 +16,6 @@ public class BookMicroserviceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BookMicroserviceApplication.class, args);
-
-        //	Initial data load test
-		/*ConfigurableApplicationContext configurableApplicationContext = SpringApplication.run(BookMicroserviceApplication.class, args);
-        BookRepository bookRepository = configurableApplicationContext
-                .getBean(BookRepository.class);
-        Book book = new Book(111, "7y0opds5ts9",
-                "Animal Kingdom", LocalDate.now(),
-                12, 1, "John Smith");
-        bookRepository.save(book);*/
     }
 
     @Bean

@@ -60,20 +60,9 @@ public class IssuerController {
             log.info("Issuer with #id {} has been deleted", issuer);
     }
 
-    @ApiOperation(value = "Delete / Cancel Book Issue", response = Issuer.class)
-    @DeleteMapping(path = "/cancel/{id}")
-    public void cancelIssuance(@PathVariable(value = "id") Integer id) {
-        log.info("Issuer with #id {} has cancelIssue", id);
-        boolean hasRemovedIssuance = issuerService.delete(id);
-        if (!hasRemovedIssuance) {
-            log.error("Issuer not found with id {}", id);
-            throw new IssuerNotFoundExceptionResponseStatus(HttpStatus.NOT_FOUND);
-        } else
-            log.info("Issuer with #id {} has been deleted", id);
-    }
 
     @ApiOperation(value = "Fetch Issuances by ISBN", response = Issuer.class)
-    @GetMapping("/issuances/{isbn}")
+    @GetMapping("/isbn/{isbn}")
     public ResponseEntity<List<Issuer>> findIssuancesByIsbn(@PathVariable String isbn) {
         List<Issuer> issuances = issuerService.findIssuancesByIsbn(isbn);
         log.info(" Issuer findIssuancesByIsbn OK {}", isbn);

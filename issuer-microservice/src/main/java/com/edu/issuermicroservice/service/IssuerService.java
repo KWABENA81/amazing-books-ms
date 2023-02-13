@@ -76,7 +76,6 @@ public class IssuerService implements IIssuerService {
             String custId = customerInfo(request);
             issuer.setCustId(custId.toUpperCase());
             issuer.setNoOfCopies(request.getIssuer().getNoOfCopies());
-
             //  save issuer
             issuerRepository.save(issuer);
             //  update book record
@@ -126,9 +125,9 @@ public class IssuerService implements IIssuerService {
     }
 
     private ResponseEntity<IssuanceResponse> updateBook(Book book) {
-        String bookResourceUrl = bookResourceUpdateUrl + book.getId();
+        String bookResourceUpdateUrl = this.bookResourceUpdateUrl + book.getId();
         ResponseEntity<IssuanceResponse> responseEntity
-                = restTemplate.exchange(bookResourceUrl, HttpMethod.PUT,
+                = restTemplate.exchange(bookResourceUpdateUrl, HttpMethod.PUT,
                 new HttpEntity<IssuanceResponse>(createHeaders("user", "Password")),
                 IssuanceResponse.class);
         return responseEntity;
@@ -143,15 +142,29 @@ public class IssuerService implements IIssuerService {
 
         if (issuanceOptional.isPresent()) {
             Issuer issuance = issuanceOptional.get();
-            issuance.setIsbn(issuer.getIsbn());
-            issuance.setCustId(issuer.getCustId().toUpperCase());
-            issuance.setNoOfCopies(issuer.getNoOfCopies());
+            try {
+                int adjQty = issuer.getNoOfCopies() - issuance.getNoOfCopies();
+                if (adjQty == 0)
+                    return false;
 
-            Issuer updatedObj = issuerRepository.save(issuance);
-            return (updatedObj != null);
+                Book book = fetchBookByIsbn(issuance.getIsbn());
+                int issuedCopies = book.getIssuedCopies();
+
+                book.setIssuedCopies(issuedCopies + adjQty);
+                ResponseEntity<IssuanceResponse> bookResponse = updateBook(book);
+                log.info("Response of Book Update; {}", bookResponse);
+
+                issuance.setNoOfCopies(issuer.getNoOfCopies());
+                Issuer issuerUpdate = issuerRepository.save(issuance);
+                log.info("Response of Book Update; {}", issuerUpdate);
+                return true;
+            } catch (Exception ex) {
+                return false;
+            }
         }
         return false;
     }
+
 
     private HttpHeaders createHeaders(final String uname, final String pword) {
         return new HttpHeaders() {

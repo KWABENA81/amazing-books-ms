@@ -14,7 +14,7 @@ spring:
   security:
     enabled: true
     user:
-      name: Edureka
+      name: User
       password: password  #$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
   ##  API GATEWAY CONFIGURATION
@@ -41,14 +41,14 @@ spring:
       - id: issuer-ms
         uri: lb://ISSUER-MICROSERVICE
         predicates:
-          - Path=/issuers/**
+          - Path=/issuances/**
         #  - Method=GET,POST,DELETE
         filters:
           - name: CircuitBreaker
             args:
               name: issuer-ms
               fallbackuri: forward:/issuerFallBack
-          - RewritePath=/issuers/(?<segment>.*), /$\{segment}
+          - RewritePath=/issuances/(?<segment>.*), /$\{segment}
           #- RedirectTo=302, /error
           #- SetPath=/issuer
 
@@ -73,19 +73,11 @@ info:
     java:
       version: ${java.version}
 
-# logging
-logging:
-  file:
-    path:  logs/${spring.application.name}-logs
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
-
 management:
   endpoints:
     web:
       exposure:
-        include:  [ "health","prometheus","metrics","gateway"]
+        include:  ["health","prometheus","metrics","gateway"]
       base-path: /actuator
   endpoint:
     metrics:
@@ -94,3 +86,13 @@ management:
       enabled: true
     health:
       show-details: always
+
+# logging
+logging:
+  file:
+    path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+
+

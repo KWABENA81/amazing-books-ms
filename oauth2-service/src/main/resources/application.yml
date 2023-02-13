@@ -12,7 +12,7 @@ spring:
   security:
     enabled: true
     user:
-      name: Edureka
+      name: User
       password: $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
 
