@@ -13,6 +13,5 @@ import lombok.NoArgsConstructor;
 public class IssuanceResponse {
     private String customerInfo;
     private Issuer issuer;
-    private Book book;
     private String issuanceStatus;
 }

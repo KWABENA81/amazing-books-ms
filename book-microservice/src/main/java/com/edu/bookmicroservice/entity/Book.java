@@ -19,22 +19,27 @@ public class Book {
     private Integer id;
 
     @NonNull
-    private String isbn;
+    @Column(insertable = true)
+    private String isbn = "Ako087DEFAULT";
 
     @NonNull
-    private String title;
+    @Column(insertable = true)
+    private String title = "Book Title DEFAULT";
 
     @NonNull
+    @Column(insertable = true)
     private LocalDate publishedDate = LocalDate.now();
 
     @NonNull
-    private Integer totalCopies;
+    @Column(insertable = true)
+    private Integer totalCopies = 111;
 
     @NonNull
-    private Integer issuedCopies;
+    @Column(insertable = true)
+    private Integer issuedCopies = 1;
 
     @NonNull
-    private String author;
-
+    @Column(insertable = true)
+    private String author = "Main Author";
 
 }

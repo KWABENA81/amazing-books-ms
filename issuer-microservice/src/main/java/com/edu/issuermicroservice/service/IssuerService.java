@@ -69,26 +69,26 @@ public class IssuerService implements IIssuerService {
     }
 
     public IssuanceResponse doIssuance(IssuanceRequest request) {
-        Book book = fetchBookByIsbn(request.getBookIsbn());
+        Book book = fetchBookByIsbn(request.getIssuer().getIsbn());
         IssuanceResponse issuanceResponse = null;
         if (book != null && canIssueBook(book, request)) {
             Issuer issuer = new Issuer();
-            String custInfo = customerInfo(request);
-            issuer.setCustId(custInfo);
-            issuer.setNoOfCopies(request.getRequestQty());
+            String custId = customerInfo(request);
+            issuer.setCustId(custId.toUpperCase());
+            issuer.setNoOfCopies(request.getIssuer().getNoOfCopies());
 
             //  save issuer
             issuerRepository.save(issuer);
             //  update book record
             Integer oldQty = book.getIssuedCopies();
-            book.setIssuedCopies(oldQty + request.getRequestQty());
+            book.setIssuedCopies(oldQty + request.getIssuer().getNoOfCopies());
             ResponseEntity<IssuanceResponse> issuanceResponseRE = updateBook(book);
 
             log.info("ResponseEntity<IssuanceResponse> of book Update {}", issuanceResponseRE);
             issuanceResponse = new IssuanceResponse();
             issuanceResponse.setIssuer(issuer);
-            issuanceResponse.setBook(book);
-            issuanceResponse.setCustomerInfo(custInfo);
+
+            issuanceResponse.setCustomerInfo(custId);
             issuanceResponse.setIssuanceStatus("SUCCESS");
         }
         return issuanceResponse;
@@ -97,7 +97,7 @@ public class IssuerService implements IIssuerService {
     private String customerInfo(IssuanceRequest request) {
         StringBuilder sbuilder = new StringBuilder();
 
-        sbuilder.append(request.getCustomer().info()).append(FS)
+        sbuilder.append(request.getIssuer().getCustId()).append(FS)
                 .append(UUID.randomUUID()).append(FS)
                 .append(issuanceProcessing());
         return sbuilder.toString().toUpperCase();
@@ -105,7 +105,7 @@ public class IssuerService implements IIssuerService {
 
     private boolean canIssueBook(Book book, IssuanceRequest request) {
         return book != null && request != null
-                && ((book.getTotalCopies() - book.getIssuedCopies()) > request.getRequestQty());
+                && ((book.getTotalCopies() - book.getIssuedCopies()) > request.getIssuer().getNoOfCopies());
     }
 
     public List<Issuer> findIssuancesByIsbn(String isbn) {
@@ -127,8 +127,10 @@ public class IssuerService implements IIssuerService {
 
     private ResponseEntity<IssuanceResponse> updateBook(Book book) {
         String bookResourceUrl = bookResourceUpdateUrl + book.getId();
-        ResponseEntity<IssuanceResponse> responseEntity = restTemplate.exchange(bookResourceUrl, HttpMethod.PUT,
-                new HttpEntity<IssuanceResponse>(createHeaders("user", "Password")), IssuanceResponse.class);
+        ResponseEntity<IssuanceResponse> responseEntity
+                = restTemplate.exchange(bookResourceUrl, HttpMethod.PUT,
+                new HttpEntity<IssuanceResponse>(createHeaders("user", "Password")),
+                IssuanceResponse.class);
         return responseEntity;
     }
 
@@ -136,16 +138,17 @@ public class IssuerService implements IIssuerService {
         List<Issuer> issuances = findIssuancesByIsbn(issuer.getIsbn());
         //  get issuer with isbn & containing customer Id
         Optional<Issuer> issuanceOptional = issuances.stream()
-                .filter(is -> is.getCustId().contains(issuer.getCustId())).findFirst();
+                .filter(storedIssuance -> storedIssuance.getCustId()
+                        .contains(issuer.getCustId())).findFirst();
 
         if (issuanceOptional.isPresent()) {
             Issuer issuance = issuanceOptional.get();
             issuance.setIsbn(issuer.getIsbn());
-            issuance.setCustId(issuer.getCustId());
+            issuance.setCustId(issuer.getCustId().toUpperCase());
             issuance.setNoOfCopies(issuer.getNoOfCopies());
 
             Issuer updatedObj = issuerRepository.save(issuance);
-            return (updatedObj != null /*&& updatedObj == issuer*/);
+            return (updatedObj != null);
         }
         return false;
     }
@@ -162,42 +165,5 @@ public class IssuerService implements IIssuerService {
             }
         };
     }
-
-
 }
 
-//    private Object requestCallback(final Book updatedBook) {
-//        return request -> {
-//            ObjectMapper mapper = new ObjectMapper();
-//            mapper.writeValue(request.getBody(), updatedBook);
-//            request.getHeaders().add(
-//                    HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JASON_VALUE);
-//            request.getHeaders().add(HttpHeaders.AUTHORIZATION, "Basic" + getBase64EncodedLogPass());
-//        };
-//    }
-
-// @ApiOperation(value = "Issue Book to customer", response = Issuer.class)
-// @PostMapping(path = "/bookIssuance")
-// public IssuanceResponse doIssuance(@RequestBody IssuanceRequest  issuanceRequest){
-// return issuerService.saveIssuance(issuanceRequest);
-// }
-//    public Issuer doIssuance(Issuer issuer, String isbn) {
-//        StringBuilder sbuilder = new StringBuilder(customerInfo);
-//        sbuilder.append(issuanceProcessing());
-//        sbuilder.append(UUID.randomUUID().toString());
-//
-//        issuer.setCustId(sbuilder.toString().replace("-", "").toUpperCase(););
-//        issuer.setBookId(issuer.getBookId());
-//
-//
-//        issuer.setIsbn("DEFAULT");
-//        issuer.setNoOfCopies(2);
-//        return issuerRepository.save(issuer);
-//    }
-//    public IssuanceResponse saveIssuance(IssuanceRequest issuanceRequest) {
-//        Customer customer = issuanceRequest.getCustomer();
-//        String isbn = issuanceRequest.getBookIsbn();
-//        Integer copies = issuanceRequest.getNoOfCopies();
-//
-//        template.postForObject("http://BOOK-MICROSERVICE/books/doIssuance")
-//    }

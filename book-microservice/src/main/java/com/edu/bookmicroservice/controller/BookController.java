@@ -28,9 +28,18 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+
+    @ApiOperation(value = "Fetch all books", response = Book.class, code = 200)
+    @GetMapping
+    public ResponseEntity<List<Book>> books() {
+        log.info("Start All Books retrieval");
+        List<Book> books = bookService.findAll().stream().collect(Collectors.toList());
+        return ResponseEntity.ok(books);
+    }
+
     @ApiOperation(value = "Fetch book by ISBN", response = Book.class, code = 200)
     @GetMapping("/isbn/{isbn}")
-    public ResponseEntity<Book> booksByIsbn(@PathVariable(value = "isbn") String isbn) {
+    public ResponseEntity<Book> findByIsbn(@PathVariable(value = "isbn") String isbn) {
         Optional<Book> bookOptional = bookService.findByIsbn(isbn);
         if (bookOptional.isPresent()) {
             log.info(" Books findByIsbn OK");
@@ -39,14 +48,6 @@ public class BookController {
             log.error("Start findByIsbn Books failed");
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @ApiOperation(value = "Fetch all books", response = Book.class, code = 200)
-    @GetMapping
-    public ResponseEntity<List<Book>> books() {
-        log.info("Start All Books retrieval");
-        List<Book> books = bookService.findAll().stream().collect(Collectors.toList());
-        return ResponseEntity.ok(books);
     }
 
     @ApiOperation(value = "Fetch book by Id", response = Book.class, code = 200)
@@ -63,59 +64,24 @@ public class BookController {
     }
 
     @ApiOperation(value = "To add a book", response = Book.class, code = 200)
-    @PostMapping("/add")
-    public Book add(@RequestBody Book book) {
-        log.error("Start adding Books{}", book);
-        return bookService.save(book);
+    @PostMapping("/addBook")
+    public Book addBook(@RequestBody Book book) {
+        log.error("Adding Book {}", book.getIsbn());
+        return bookService.addBook(book);
     }
 
-    @ApiOperation(value = "Update existing book", response = Book.class, code = 200)
-    @PutMapping("/edit/{id}")
-    public Book editBook(@RequestBody Book nbook, @PathVariable(value = "id") Integer id) {
-        return bookService.findById(id).map(bk -> {
-            bk.setIsbn(nbook.getIsbn());
-            bk.setTitle(nbook.getTitle());
-            bk.setAuthor(nbook.getAuthor());
-            bk.setTotalCopies(nbook.getTotalCopies());
-            // bk.setIssuanceId(nbook.getIssuanceId());
-            bk.setPublishedDate(nbook.getPublishedDate());
+    @ApiOperation(value = "Edit existing book", response = Book.class, code = 200)
+    @PutMapping("/editBook")
+    public Book editBook(@RequestBody Book book) {
+        log.error("Edit Book {}", book.getIsbn());
+        return bookService.updateBook(book);
+    }
 
-            return bookService.save(bk);
-        }).orElseGet(() -> {
-            nbook.setId(id);
-            bookService.save(nbook);
-            return bookService.save(nbook);
-        });
+
+    @ApiOperation(value = "Delete book", response = Book.class, code = 200)
+    @DeleteMapping("/deleteBook")
+    public boolean deleteBook(@RequestBody Book book) {
+        log.error("Delete Book {}", book.getIsbn());
+        return bookService.deleteBook(book);
     }
 }
-//    @RequestMapping("/error")
-//    public String handleError(HttpServletRequest request) {
-//        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-//
-//        if (status != null) {
-//            Integer statusCode = Integer.valueOf(status.toString());
-//
-//            if (statusCode == HttpStatus.NOT_FOUND.value()) {
-//                log.error("ERROR PAGE -- error-404");
-//                return "error-404";
-//            } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-//                log.error("ERROR PAGE -- error-500");
-//                return "error-500";
-//            }
-//        }
-//        return "error";
-//    }
-
-
-//    @ApiOperation(value = "Delete a book", response = Book.class, code = 200)
-//    @DeleteMapping(value = "/delete/{id}")
-//    public void deleteBook(@PathVariable(value = "id") Integer id) {
-//        try {
-//            log.info("START:  Book with id {} Deleted", id);
-//            bookService.delete(id);
-//            log.info("FINISHED:  Book with id {} Deleted", id);
-//        } catch (Exception ex) {
-//            log.error("FAILED:  Book with id {} Deleted", id);
-//            throw new BookNotFoundExceptionResponseStatus(HttpStatus.NOT_FOUND);
-//        }
-//    }
