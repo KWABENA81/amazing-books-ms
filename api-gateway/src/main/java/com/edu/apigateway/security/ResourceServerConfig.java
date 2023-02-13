@@ -1,4 +1,4 @@
-package com.edu.apigateway;
+package com.edu.apigateway.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

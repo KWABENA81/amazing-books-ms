@@ -36,8 +36,8 @@ public class ApiGatewayApplication {
 //                        .host("*.circuitbreaker.com")
 //                        .filters(f -> f.circuitBreaker(config -> config.setName("mycmd")))
 //                        .uri("https://httpbin.org:80"))
-////                .route(r -> r.path("/api/**")
-////                        .filters(f -> f.rewritePath("/api/","/BOOK-MICROSERVICE/"))
+////                .route(r -> r.path("/controller/**")
+////                        .filters(f -> f.rewritePath("/controller/","/BOOK-MICROSERVICE/"))
 ////                        .uri("lb://BOOK-MICROSERVICE").id("BOOK-MICROSERVICE"))
 //                .build();
 //    }

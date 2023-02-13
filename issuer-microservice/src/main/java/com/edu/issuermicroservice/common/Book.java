@@ -12,9 +12,12 @@ import java.time.LocalDate;
 public class Book {
     private Long id;
     private String isbn;
-    private String title;
     private String author;
+    private String title;
     private LocalDate publishedDate = LocalDate.now();
-    private Integer issuedId;
     private Integer totalCopies;
+    private Integer issuedCopies;
+
+    //  may be ignored / go to other class?
+   // private Integer issuanceId;
 }

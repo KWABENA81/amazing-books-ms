@@ -10,7 +10,7 @@ public interface IBookService {
 
     Collection<Book> findAll();
 
-    List<Book> findByIssuerId(Long Id);
+   // List<Book> findByIssuanceId(Long Id);
 
     Optional<Book> findById(Long id);
 

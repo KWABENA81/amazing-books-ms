@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssuerResponse {
+public class IssuanceResponse {
     private String customerInfo;
     private Issuer issuer;
     private List<Book> books;

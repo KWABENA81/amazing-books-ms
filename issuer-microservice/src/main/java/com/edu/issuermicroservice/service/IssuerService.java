@@ -5,19 +5,20 @@ import com.edu.issuermicroservice.model.Issuer;
 import com.edu.issuermicroservice.repo.IssuerRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
 public class IssuerService implements IIssuerService {
 
     @Autowired
     private IssuerRepository issuerRepository;
-
 
     public Collection<Issuer> findAll() {
         return issuerRepository.findAll();
@@ -31,45 +32,39 @@ public class IssuerService implements IIssuerService {
     @Override
     public Issuer findByIsbn(String isbn) {
         List<Issuer> issueList = issuerRepository.findByIsbn(isbn);
-        return issueList.stream().findFirst().get();
+        Optional<Issuer> optionalIssuer = issueList.stream().findFirst();
+        return (optionalIssuer.isPresent())
+                ? issueList.stream().findFirst().get()
+                : optionalIssuer.orElse(null);
     }
 
     @Override
     public boolean delete(Long id) {
         try {
             issuerRepository.deleteById(id);
+            log.info("Issuer {} delete successful", id);
         } catch (Exception ex) {
+            log.error("Error delete, Issuer {} exception {}", id, ex.getMessage());
             return false;
         }
         return true;
     }
 
-    public String issueHandling() {
+    private String issuanceHandlingStatus() {
         return new Random().nextBoolean() ? "SUCCESS" : "FAILURE";
     }
-//    public List<Issuer> findIssuerByCustomer(String custid) {
-//        return null;//issuerRepository.findByCustId(custid);
-//    }
 
-//    public String customerBookIssuing() {
-//        return new Random().nextBoolean() ? "SUCCESS" : "FAILURE";
-//    }
-
-    public Issuer doIssue(Issuer issuer) {
-        issuer.setIssueStatus(issueHandling());
+    public Issuer doIssuance(Issuer issuer) {
+        //book
+        String customerInfo = "555523177";
+        StringBuilder sbuilder = new StringBuilder(customerInfo);
+        sbuilder.append(issuanceHandlingStatus());
+        sbuilder.append(UUID.randomUUID().toString());
         // issuer.setBookId(issuer.getBookId());
-        issuer.setIssueTransactionId(UUID.randomUUID().toString().replace("-", "").toUpperCase());
-        issuer.setCustomerInfo("4164587787");
+        issuer.setCustId(sbuilder.toString());
         issuer.setIsbn("DEFAULT");
-        issuer.setNoOfCopies(102);
+        issuer.setNoOfCopies(2);
         return issuerRepository.save(issuer);
     }
-
-//    public Issuer findIssuerByBookIsbn(String bookIsbn) {
-//        List<Issuer> list = issuerRepository.findIssuerByBookIsbn(bookIsbn);
-//        return (!list.isEmpty()) ? list.stream().findFirst().get() :
-//                new Issuer(999, "nul", "nul", 0, "nul", "nul");
-//    }
-
 
 }

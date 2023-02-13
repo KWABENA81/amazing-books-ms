@@ -1,8 +1,9 @@
-package com.edu.bookmicroservice.api;
+package com.edu.bookmicroservice.controller;
 
 
 import com.edu.bookmicroservice.common.TransactionRequest;
 import com.edu.bookmicroservice.common.TransactionResponse;
+import com.edu.bookmicroservice.exceptions.BookNotFoundExceptionResponseStatus;
 import com.edu.bookmicroservice.model.Book;
 import com.edu.bookmicroservice.service.BookService;
 import io.swagger.annotations.Api;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @CrossOrigin(origins = {"${app.security.cors.origin}"})
-@Api(value = "Books Class", protocols = "http")
+@Api(value = "Books MicroService", protocols = "http")
 @RequestMapping(path = "/book")
 public class BookController {
 
@@ -61,14 +61,14 @@ public class BookController {
         }
     }
 
-    @ApiOperation(value = "Fetch books by issuer Id", response = Book.class)
-    @GetMapping("/issuer/{id}")
-    public ResponseEntity<List<Book>> fetchByIssuerId(@PathVariable(value = "id") Long id) {
-        log.info("67 Books fetchByIssuerId OK");
-        List<Book> books = bookService.findByIssuerId(id);
-        log.info("69 Books fetchByIssuerId OK {}", books);
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
+//    @ApiOperation(value = "Fetch books by issuer Id", response = Book.class)
+//    @GetMapping("/issuer/{id}")
+//    public ResponseEntity<List<Book>> fetchByIssuerId(@PathVariable(value = "id") Long id) {
+//        log.info("67 Books fetchByIssuerId OK");
+//        List<Book> books = bookService.findByIssuanceId(id);
+//        log.info("69 Books fetchByIssuerId OK {}", books);
+//        return new ResponseEntity<>(books, HttpStatus.OK);
+//    }
 
 
     @ApiOperation(value = "To create a book", response = Book.class, code = 200)
@@ -85,7 +85,7 @@ public class BookController {
             bk.setTitle(nbook.getTitle());
             bk.setAuthor(nbook.getAuthor());
             bk.setTotalCopies(nbook.getTotalCopies());
-            bk.setIssuerId(nbook.getIssuerId());
+           // bk.setIssuanceId(nbook.getIssuanceId());
             bk.setPublishedDate(nbook.getPublishedDate());
 
             return bookService.save(bk);
@@ -105,7 +105,7 @@ public class BookController {
             log.info("FINISHED:  Book with id {} Deleted", id);
         } catch (Exception ex) {
             log.error("FAILED:  Book with id {} Deleted", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new BookNotFoundExceptionResponseStatus(HttpStatus.NOT_FOUND);
         }
     }
 

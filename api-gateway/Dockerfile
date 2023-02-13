@@ -1,4 +1,4 @@
-#   Dockerfile for api-gateway server
+#   Dockerfile for controller-gateway server
 #
 FROM openjdk:11
 

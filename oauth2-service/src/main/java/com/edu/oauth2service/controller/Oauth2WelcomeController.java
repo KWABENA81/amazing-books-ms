@@ -1,4 +1,4 @@
-package com.edu.oauth2service;
+package com.edu.oauth2service.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

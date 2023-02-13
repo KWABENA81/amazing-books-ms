@@ -36,11 +36,11 @@ public class BookService implements IBookService {
         return bookRepository.findAll();
     }
 
-    @Override
-    public List<Book> findByIssuerId(final Long id) {
-        log.info(" Fetch Books by Issuer id {} ", id);
-        return bookRepository.findByIssuerId(id);
-    }
+    //@Override
+//    public List<Book> findByIssuanceId(final Long id) {
+//        log.info(" Fetch Books by Issuer id {} ", id);
+//        return bookRepository.findByIssuanceId(id);
+//    }
 
     @Override
     public Optional<Book> findById(Long id) {
@@ -55,9 +55,7 @@ public class BookService implements IBookService {
     @Override
     public void delete(Long id) {
         // Optional<Book> optionalBook = bookRepository.findById(id);
-
-        // if (optionalBook.isPresent()) {
-        //     Book book = optionalBook.get();
+        // if (optionalBook.isPresent()) {        //     Book book = optionalBook.get();
         log.info(" BookService:  Book with id {} Deleted", id);
         bookRepository.deleteById(id);
         // }
@@ -75,7 +73,7 @@ public class BookService implements IBookService {
         issuer.setCopies(book.getTotalCopies());
 
         Issuer issuerResponse = template
-                .postForObject("http://ISSUERMS/issuer/doIssue", issuer, Issuer.class);
+                .postForObject("http://ISSUER-MICROSERVICE/issuer/doIssuance", issuer, Issuer.class);
         String message = (issuerResponse.getStatus().equalsIgnoreCase("SUCCESS"))
                 ? "Issuer SUCCESSFULLY" : "Invalid entry, FAILURE";
 

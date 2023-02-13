@@ -96,6 +96,10 @@ management:
       enabled: true
     health:
       show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 
 
   #  mvc:

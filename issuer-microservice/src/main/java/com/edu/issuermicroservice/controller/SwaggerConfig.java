@@ -1,4 +1,4 @@
-package com.edu.issuermicroservice;
+package com.edu.issuermicroservice.controller;
 
 
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
@@ -34,9 +34,9 @@ public class SwaggerConfig {
 
     @Bean
     public Docket docket() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("issuer-api")
+        return new Docket(DocumentationType.SWAGGER_2).groupName("issuer-controller")
                 .apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.edu.issuerms"))
+                .apis(RequestHandlerSelectors.basePackage("com.edu.issuermicroservice.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -49,9 +49,11 @@ public class SwaggerConfig {
     }
 
 
-    private boolean shouldRegisterLinksMapping(WebEndpointProperties webEndpointProperties, Environment environment, String basePath) {
+    private boolean shouldRegisterLinksMapping(WebEndpointProperties webEndpointProperties,
+                                               Environment environment, String basePath) {
         return webEndpointProperties.getDiscovery().isEnabled() &&
-                (StringUtils.hasText(basePath) || ManagementPortType.get(environment).equals(ManagementPortType.DIFFERENT));
+                (StringUtils.hasText(basePath) || ManagementPortType.get(environment)
+                        .equals(ManagementPortType.DIFFERENT));
     }
 
     @Bean

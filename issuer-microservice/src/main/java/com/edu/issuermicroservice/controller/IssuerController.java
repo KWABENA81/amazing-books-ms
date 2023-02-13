@@ -1,8 +1,9 @@
-package com.edu.issuermicroservice.api;
+package com.edu.issuermicroservice.controller;
 
 
 import com.edu.issuermicroservice.common.Book;
-import com.edu.issuermicroservice.common.IssuerResponse;
+import com.edu.issuermicroservice.common.IssuanceResponse;
+import com.edu.issuermicroservice.exceptions.IssuerNotFoundExceptionResponseStatus;
 import com.edu.issuermicroservice.model.Issuer;
 import com.edu.issuermicroservice.service.IssuerService;
 import io.swagger.annotations.Api;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -63,40 +63,39 @@ public class IssuerController {
     @ApiOperation(value = "Fetch Issue by Id", response = Issuer.class)
     @GetMapping(path = "/issuers/{id}")
 //@PrometheusTimeMethod(name = "issuer_resource_controller_issuer_by_id_duration_seconds", help = "Some helpful info here")
-    public ResponseEntity<IssuerResponse> issuerBooksById(@PathVariable(value = "id") Long id) {
-        IssuerResponse issuerResponse = new IssuerResponse();
+    public ResponseEntity<IssuanceResponse> issuerBooksById(@PathVariable(value = "id") Long id) {
+        IssuanceResponse issuanceResponse = new IssuanceResponse();
 
         log.info("Issuer issuerBooksById OK");
         Optional<Issuer> optionalIssuer = issuerService.findById(id);
         if (optionalIssuer.isPresent()) {
             Issuer isuance = optionalIssuer.get();
-            issuerResponse.setIssuer(isuance);
-            issuerResponse.setCustomerInfo(isuance.getCustomerInfo());
+            issuanceResponse.setIssuer(isuance);
+            issuanceResponse.setCustomerInfo(isuance.getCustId());
             log.info("74 Books issuerBooksById OK {}", isuance);
             List<Book> issuerBooks = null;
             try {
                 log.info("74-77 Books issuerBooksById OK {}", issuerBooks);
                 issuerBooks = restTemplate.getForObject(URLEncoder
                         .encode("http://localhost:8097/book/issuer/" + id, "UTF-8"), List.class);
-                // .encode("http://BOOKMS/book/issuer/" + id, "UTF-8"), List.class);
-                issuerResponse.setBooks(issuerBooks);
+                // .encode("http://BOOK-MICROSERVICE/book/issuer/" + id, "UTF-8"), List.class);
+                issuanceResponse.setBooks(issuerBooks);
                 log.info("82 Books issuerBooksById OK {}", issuerBooks);
-                return new ResponseEntity<>(issuerResponse, HttpStatus.OK);
+                return new ResponseEntity<>(issuanceResponse, HttpStatus.OK);
             } catch (UnsupportedEncodingException e) {
                 log.error("85 UnsupportedEncodingException {}", e.getMessage());
                 throw new RuntimeException(e);
             }
-
         } else {
             log.error("FindById Issuer failed");
             return ResponseEntity.notFound().build();
         }
     }
 
-    @ApiOperation(value = "Issue  to Issuer Customer", response = Issuer.class)
-    @PostMapping(path = "/doIssue")
-    public ResponseEntity<Issuer> doIssue(@RequestBody Issuer issuer) {
-        Issuer savedIssuer = issuerService.doIssue(issuer);
+    @ApiOperation(value = "Issue Book to Customer", response = Issuer.class)
+    @PostMapping(path = "/doIssuance")
+    public ResponseEntity<Issuer> doIssuance(@RequestBody Issuer issuer) {
+        Issuer savedIssuer = issuerService.doIssuance(issuer);
         return new ResponseEntity<>(savedIssuer, HttpStatus.OK);
     }
 
@@ -109,7 +108,7 @@ public class IssuerController {
         boolean isRemoved = issuerService.delete(id);
         if (!isRemoved) {
             log.error("Issuer not found with id {}", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new IssuerNotFoundExceptionResponseStatus(HttpStatus.NOT_FOUND);
         } else
             log.info("Issuer with #id {} has been deleted", id);
     }
