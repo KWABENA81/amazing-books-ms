@@ -22,8 +22,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class BookService implements IBookService {
-    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuers/issuances/";
-    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuers/issuances/";
+    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuances/isbn/";
+    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuances/isbn/";
     @Autowired
     private BookRepository bookRepository;
 

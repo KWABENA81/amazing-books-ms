@@ -62,7 +62,7 @@ public class IssuerController {
 
 
     @ApiOperation(value = "Fetch Issuances by ISBN", response = Issuer.class)
-    @GetMapping("/issuances/{isbn}")
+    @GetMapping("/isbn/{isbn}")
     public ResponseEntity<List<Issuer>> findIssuancesByIsbn(@PathVariable String isbn) {
         List<Issuer> issuances = issuerService.findIssuancesByIsbn(isbn);
         log.info(" Issuer findIssuancesByIsbn OK {}", isbn);
