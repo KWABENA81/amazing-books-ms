@@ -3,6 +3,8 @@ package com.edu.issuermicroservice.service;
 
 import com.edu.issuermicroservice.model.Issuer;
 import com.edu.issuermicroservice.repo.IssuerRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,14 +31,7 @@ public class IssuerService implements IIssuerService {
         return issuerRepository.findById(id);
     }
 
-    @Override
-    public Issuer findByIsbn(String isbn) {
-        List<Issuer> issueList = issuerRepository.findByIsbn(isbn);
-        Optional<Issuer> optionalIssuer = issueList.stream().findFirst();
-        return (optionalIssuer.isPresent())
-                ? issueList.stream().findFirst().get()
-                : optionalIssuer.orElse(null);
-    }
+
 
     @Override
     public boolean delete(Long id) {
@@ -50,15 +45,15 @@ public class IssuerService implements IIssuerService {
         return true;
     }
 
-    private String issuanceHandlingStatus() {
-        return new Random().nextBoolean() ? "SUCCESS" : "FAILURE";
+    private String issuanceProcessing() {
+        return new Random().nextBoolean() ? "success" : "failure";
     }
 
     public Issuer doIssuance(Issuer issuer) {
         //book
         String customerInfo = "555523177";
         StringBuilder sbuilder = new StringBuilder(customerInfo);
-        sbuilder.append(issuanceHandlingStatus());
+        sbuilder.append(issuanceProcessing());
         sbuilder.append(UUID.randomUUID().toString());
         // issuer.setBookId(issuer.getBookId());
         issuer.setCustId(sbuilder.toString());
@@ -67,4 +62,19 @@ public class IssuerService implements IIssuerService {
         return issuerRepository.save(issuer);
     }
 
+    public Issuer findIssuancesByIsbn(String isbn) throws JsonProcessingException {
+        List<Issuer> issuances = issuerRepository.findIssuanceByBookIsbn(isbn);
+        Issuer issuer = issuances.stream().findFirst().get();
+        log.info("Issuer findIssuancesByIsbn : {}", new ObjectMapper().writeValueAsString(issuer));
+        return issuer;
+    }
+
+    //@Override
+    public Issuer findBooksByIsbn(String isbn) {
+        List<Issuer> issueList = issuerRepository.findIssuanceByBookIsbn(isbn);
+        Optional<Issuer> optionalIssuer = issueList.stream().findFirst();
+        return (optionalIssuer.isPresent())
+                ? issueList.stream().findFirst().get()
+                : optionalIssuer.orElse(null);
+    }
 }

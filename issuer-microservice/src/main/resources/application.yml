@@ -8,7 +8,6 @@ server:
 spring:
   application:
     name: ISSUER-MICROSERVICE
-
   h2:
     console:
       enabled: true
@@ -16,13 +15,11 @@ spring:
       settings:
         trace: false
         web-allow-others: false
-
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:issuerdb
     username: sa
     password: password
-
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
@@ -33,14 +30,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
   security:
     enabled: true
     user:
       name: Edureka
       password: password  # $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
-
     oauth2:
       resource-server:
         jwt:
@@ -98,7 +93,7 @@ info:
 # logging
 logging:
   file:
-    path:  logs/${spring.application.name}-logs
+    path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
 
 
 

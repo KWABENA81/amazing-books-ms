@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = {"${app.security.cors.origin}"})
 @Api(value = "Books MicroService", protocols = "http")
-@RequestMapping(path = "/book")
+@RequestMapping(path = "/books")
 public class BookController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class BookController {
 
     @ApiOperation(value = "Fetch all books", response = Book.class, code = 200)
     //@PrometheusTimeMethod(name = "ms_book_path_duration_seconds", help = "book microservice help")
-    @GetMapping(path = "/books")
+    @GetMapping     //(path = "/books")
     public ResponseEntity<List<Book>> books() {
         log.info("Start All Books retrieval");
         List<Book> books = bookService.findAll().stream().collect(Collectors.toList());

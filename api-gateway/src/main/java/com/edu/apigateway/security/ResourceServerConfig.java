@@ -15,14 +15,14 @@ import javax.crypto.spec.SecretKeySpec;
 public class ResourceServerConfig {
 
 //    @Bean
-//    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
-//        httpSecurity
+//    public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {
+//        http
 //                .authorizeExchange().anyExchange().authenticated()
 //                .and()
 //                .oauth2ResourceServer().jwt();
-//        return httpSecurity.build();
+//        return http.build();
 //    }
-
+//
 //    @Bean
 //    public ReactiveJwtDecoder reactiveJwtDecoder() {
 //        byte[] keyInBytes = "123456789012345678901234567890AB".getBytes();

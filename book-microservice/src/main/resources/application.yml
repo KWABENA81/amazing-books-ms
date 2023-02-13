@@ -1,6 +1,5 @@
 server:
   port: 8097
-
   error:
     path: /error
     whitelabel:
@@ -9,7 +8,6 @@ server:
 spring:
   application:
     name: BOOK-MICROSERVICE
-
   h2:
     console:
       enabled: true
@@ -17,13 +15,11 @@ spring:
       settings:
         trace: false
         web-allow-others: false
-
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:bookdb
     username: sa
     password: password
-
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
@@ -34,14 +30,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
   security:
     enabled: true
     user:
       name: Edureka
       password: password  #$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
-
     oauth2:
       resource-server:
         jwt:
@@ -81,7 +75,7 @@ info:
 # logging
 logging:
   file:
-    path:  logs/${spring.application.name}-logs
+    path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
 
 management:
   endpoints:
@@ -100,42 +94,3 @@ management:
     export:
       prometheus:
         enabled: true
-
-
-  #  mvc:
-  #    pathmatch:
-  #      matching-strategy:  ant_path_matcher
-
-  #spring:
-  #   devtools:
-  #   add-properties: false
-  #  security:
-  #    enabled: true
-  #    user:
-  #      name: Edureka
-  #      password: password
-  #      roles: USER, ADMIN
-  #    oauth2:
-  #      resource-server:
-  #        jwt:
-  #          issuer-uri: "https://api.asgardeo.io/t/imeshaorg/oauth2/token"
-
-  #    enabled: false
-  ##spring:
-  #  autoconfigure:
-  #    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
-  #spring.
-  #  autoconfigure:
-  #    exclude: org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration
-
-  # Actuator endpoints for Circuit Breaker
-  #management:    health:      circuitbreakers:        enabled: true
-  #management.endpoints.web.exposure.include=health
-  #management.endpoint.health.show-details=always
-
-  # Security enable/disable
-  #security:
-  #  ignored: /**
-  #  basic:
-  #    enabled: false
-  ####

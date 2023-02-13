@@ -10,7 +10,7 @@ public interface IIssuerService {
 
     Optional<Issuer> findById(Long id);
 
-    Issuer findByIsbn(String isbn);
+//    Issuer findBookByIsbn(String isbn);
 
     boolean delete(Long id);
 

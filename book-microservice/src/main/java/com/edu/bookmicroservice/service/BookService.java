@@ -1,7 +1,6 @@
 package com.edu.bookmicroservice.service;
 
 
-
 import com.edu.bookmicroservice.common.Issuer;
 import com.edu.bookmicroservice.common.TransactionRequest;
 import com.edu.bookmicroservice.common.TransactionResponse;
@@ -11,11 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -29,7 +28,11 @@ public class BookService implements IBookService {
     private BookRepository bookRepository;
 
     @Autowired
+    @Lazy
     private RestTemplate template;
+
+//    @Value("${book-issuer-ms.issuer-service.endpoints.endpoint.uri}")
+//    private String ENDPOINT_URL;
 
     @Override
     public Collection<Book> findAll() {
@@ -54,11 +57,8 @@ public class BookService implements IBookService {
 
     @Override
     public void delete(Long id) {
-        // Optional<Book> optionalBook = bookRepository.findById(id);
-        // if (optionalBook.isPresent()) {        //     Book book = optionalBook.get();
         log.info(" BookService:  Book with id {} Deleted", id);
         bookRepository.deleteById(id);
-        // }
     }
 
     public Book save(Book book) {

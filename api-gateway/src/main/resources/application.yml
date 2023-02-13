@@ -1,6 +1,5 @@
 server:
-  port: 8181
-
+  port: 8989
   error:
     path: /error
     whitelabel:
@@ -9,65 +8,49 @@ server:
 spring:
   application:
     name: API-GATEWAY
-
   main:
     web-application-type: reactive
-
+    allow-bean-definition-overriding:  true
   security:
     enabled: true
     user:
       name: Edureka
       password: password  #$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
-
   ##  API GATEWAY CONFIGURATION
   cloud:
     gateway:
-      discovery.locator:
-        enabled: false
-        lowerCaseServiceId: true
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true
       routes:
-        - id: BOOK-MICROSERVICE
-          uri: lb://BOOK-MICROSERVICE
-          predicates:
-          - Path=/api/book/**
-          - Method=GET,POST,DELETE
-          filters:
-          - RewritePath=/api(?<segment>/?.*), $\{segment}
-          - RedirectTo=302, /error
-          - SetPath=/book
+      - id: book-ms
+        uri: lb://BOOK-MICROSERVICE
+        predicates:
+          - Path=/books/**
+        #  - Method=GET,POST,DELETE
+        filters:
           - name: CircuitBreaker
             args:
-              name: CircuitBreaker
-              fallbackUri: forward:/bookFallBack
-
-        - id: ISSUER-MICROSERVICE
-          uri: lb://ISSUER-MICROSERVICE
-          predicates:
-          - Path=/api/issuer/**
-          - Method=GET,POST,DELETE
-          filters:
-          - RewritePath=/api(?<segment>/?.*), $\{segment}
-          - RedirectTo=302, /error
-          - SetPath=/issuer
+              name: book-ms
+              fallbackuri: forward:/bookFallBack
+          - RewritePath=/books/(?<segment>.*), /$\{segment}
+          #- RedirectTo=302, /error
+          #- SetPath=/book
+      - id: issuer-ms
+        uri: lb://ISSUER-MICROSERVICE
+        predicates:
+          - Path=/issuers/**
+        #  - Method=GET,POST,DELETE
+        filters:
           - name: CircuitBreaker
             args:
-              name: CircuitBreaker
-              fallbackUri: forward:/issuerFallBack
-
-        - id: OAUTH2-SERVICE
-          uri: lb://OAUTH2-SERVICE
-          predicates:
-          - Path=/api/oauth2/**
-          - Method=GET,POST
-          filters:
-          - RewritePath=/api(?<segment>/?.*), $\{segment}
-          - RedirectTo=302, /error
-          - SetPath=/oauth2
-          - name: CircuitBreaker
-            args:
-              name: CircuitBreaker
-              fallbackUri: forward:/oauth2FallBack
+              name: issuer-ms
+              fallbackuri: forward:/issuerFallBack
+          - RewritePath=/issuers/(?<segment>.*), /$\{segment}
+          #- RedirectTo=302, /error
+          #- SetPath=/issuer
 
 eureka:
   client:
@@ -102,7 +85,7 @@ management:
   endpoints:
     web:
       exposure:
-        include:  [ "health","prometheus","metrics","gateway","hystrix","mappings","traces"] #'*'
+        include:  [ "health","prometheus","metrics","gateway"]
       base-path: /actuator
   endpoint:
     metrics:
@@ -111,13 +94,3 @@ management:
       enabled: true
     health:
       show-details: always
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-
-
-
-
-
-
