@@ -1,6 +1,7 @@
 package com.edu.bookmicroservice.service;
 
-import com.edu.bookmicroservice.model.Book;
+
+import com.edu.bookmicroservice.entity.Book;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,11 +11,11 @@ public interface IBookService {
 
     Collection<Book> findAll();
 
-   // List<Book> findByIssuanceId(Long Id);
+   // List<Book> findByIssuanceId(Integer Id);
 
-    Optional<Book> findById(Long id);
+    Optional<Book> findById(Integer id);
 
     Optional<Book> findByIsbn(String isbn);
 
-    void delete(Long id);
+    void delete(Integer id);
 }

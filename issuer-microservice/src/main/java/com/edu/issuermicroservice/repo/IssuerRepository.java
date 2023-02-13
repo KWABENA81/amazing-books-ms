@@ -11,10 +11,7 @@ import java.util.List;
 
 @Repository
 //@Transactional
-public interface IssuerRepository extends JpaRepository<Issuer, Long> {
-
-    @Query("SELECT iss FROM Issuer iss WHERE iss.isbn=(:isbn)")
-    List<Issuer> findByBooksIsbn(@Param("isbn") String isbn);
+public interface IssuerRepository extends JpaRepository<Issuer, Integer> {
 
     @Query("SELECT iss FROM Issuer iss WHERE iss.isbn=(:isbn)")
     List<Issuer> findIssuanceByBookIsbn(@Param("isbn") String isbn);

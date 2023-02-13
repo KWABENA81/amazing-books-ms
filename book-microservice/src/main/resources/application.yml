@@ -20,18 +20,25 @@ spring:
     url: jdbc:h2:mem:bookdb
     username: sa
     password: password
+  sql:
+    init:
+      mode: always
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
+    # DDL
+    generate-dll: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop #none # spring should not use entity class to create table
     show-sql: true
     open-in-view: true
     properties:
       hibernate:
         format_sql: true
+        validator:
+          apply_to_ddl: true
   security:
-    enabled: true
+    enabled: false  #true
     user:
       name: Edureka
       password: password  #$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
@@ -72,11 +79,6 @@ info:
     java:
       version: ${java.version}
 
-# logging
-logging:
-  file:
-    path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
-
 management:
   endpoints:
     web:
@@ -94,3 +96,8 @@ management:
     export:
       prometheus:
         enabled: true
+
+# logging
+logging:
+  file:
+    path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs

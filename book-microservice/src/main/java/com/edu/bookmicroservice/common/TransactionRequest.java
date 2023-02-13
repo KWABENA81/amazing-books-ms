@@ -1,6 +1,6 @@
 package com.edu.bookmicroservice.common;
 
-import com.edu.bookmicroservice.model.Book;
+import com.edu.bookmicroservice.entity.Book;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

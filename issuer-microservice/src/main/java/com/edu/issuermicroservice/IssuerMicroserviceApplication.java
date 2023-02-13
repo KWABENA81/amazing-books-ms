@@ -20,7 +20,7 @@ public class IssuerMicroserviceApplication {
     }
 
     @Bean
-    @LoadBalanced
+   // @LoadBalanced
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

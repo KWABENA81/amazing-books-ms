@@ -3,6 +3,7 @@ package com.edu.issuermicroservice.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 
@@ -15,16 +16,15 @@ public class Issuer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
-    @Column(name = "isbn", nullable = false, length = 30)
+    @NonNull
     private String isbn;
 
-    @Column(name = "cust_id", length = 30)
+    @NonNull
     private String custId;
 
-    @Column(name = "no_of_copies")
+    @NonNull
     private Integer noOfCopies;
 
 }

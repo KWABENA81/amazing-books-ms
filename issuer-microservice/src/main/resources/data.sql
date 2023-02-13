@@ -1,4 +1,14 @@
-INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) VALUES (1, '0090123', 'xjipo0ddjskj', 24);
-INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) VALUES (2, '00390123', 'xjipo0hkhddjskj', 214);
-INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) VALUES (3, '04090123', 'xjipfgfo0ddjskj', 54);
-INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) VALUES (4, '07090123', 'xjipo0ytyddjskj', 74);
+INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) 
+					VALUES (1, '4160909900#HSG@ABC.COM#SUCCESS', '0ODSPP9IDSO', 5);
+INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) 
+					VALUES (2, '416099988700#TYSG@ABCD.COM#SUCCESS', '0ODSPP9IDSO', 4);
+INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) 
+					VALUES (3, '416099258700#TYIIUSG@ABCD.COM#SUCCESS', '0ODSPP9IDSO', 3);
+					
+INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) 
+					VALUES (4, '4160909900#HSG@ABC.COM#SUCCESS', 'UJL8D56SSS', 5);
+INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) 
+					VALUES (5, '416099988700#TYSG@ABCD.COM#SUCCESS', 'UJL8D56SSS', 9);
+					
+INSERT INTO ISSUER_TB (id, cust_id, isbn, no_of_copies) 
+					VALUES (6, '416099258700#TYIIUSG@ABCD.COM#SUCCESS', 'UJL8D56GKL', 3);
