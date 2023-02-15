@@ -1,0 +1,96 @@
+Attaching to prometheus-container, grafana-container
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.753Z caller=main.go:512 level=info msg="No time or size retention was set so using the default time retention" duration=15d
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.753Z caller=main.go:556 level=info msg="Starting Prometheus Server" mode=server version="(version=2.42.0, branch=HEAD, revision=225c61122d88b01d1f0eaaee0e05b6f3e0567ac0)"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.753Z caller=main.go:561 level=info build_context="(go=go1.19.5, platform=linux/amd64, user=root@c67d48967507, date=20230201-07:53:32)"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.754Z caller=main.go:562 level=info host_details="(Linux 5.15.0-60-generic #66-Ubuntu SMP Fri Jan 20 14:29:49 UTC 2023 x86_64 c757c4c7462e (none))"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.757Z caller=main.go:563 level=info fd_limits="(soft=1048576, hard=1048576)"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.757Z caller=main.go:564 level=info vm_limits="(soft=unlimited, hard=unlimited)"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.771Z caller=web.go:561 level=info component=web msg="Start listening for connections" address=0.0.0.0:9090
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.772Z caller=main.go:993 level=info msg="Starting TSDB ..."
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.801Z caller=tls_config.go:232 level=info component=web msg="Listening on" address=[::]:9090
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.805Z caller=tls_config.go:235 level=info component=web msg="TLS is disabled." http2=false address=[::]:9090
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.831Z caller=head.go:564 level=info component=tsdb msg="Replaying on-disk memory mappable chunks if any"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.831Z caller=head.go:608 level=info component=tsdb msg="On-disk memory mappable chunks replay completed" duration=4.03µs
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.831Z caller=head.go:614 level=info component=tsdb msg="Replaying WAL, this may take a while"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.832Z caller=head.go:685 level=info component=tsdb msg="WAL segment loaded" segment=0 maxSegment=0
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.832Z caller=head.go:722 level=info component=tsdb msg="WAL replay completed" checkpoint_replay_duration=60.67µs wal_replay_duration=544.537µs wbl_replay_duration=160ns total_replay_duration=797.564µs
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.838Z caller=main.go:1014 level=info fs_type=EXT4_SUPER_MAGIC
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.839Z caller=main.go:1017 level=info msg="TSDB started"
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.839Z caller=main.go:1197 level=info msg="Loading configuration file" filename=/etc/prometheus/prometheus.yml
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.847Z caller=main.go:1234 level=info msg="Completed loading of configuration file" filename=/etc/prometheus/prometheus.yml totalDuration=8.113881ms db_storage=1.14µs remote_storage=2.14µs web_handler=528ns query_engine=830ns scrape=275.415µs scrape_sd=94.983µs notify=55.285µs notify_sd=32.817µs rules=6.842517ms tracing=5.276µs
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.847Z caller=main.go:978 level=info msg="Server is ready to receive web requests."
+[33mprometheus-container |[0m ts=2023-02-15T14:38:47.847Z caller=manager.go:974 level=info component="rule manager" msg="Starting rule manager..."
+[36mgrafana-container |[0m ✔ Downloaded and extracted grafana-clock-panel v2.1.2 zip successfully to /var/lib/grafana/plugins/grafana-clock-panel
+[36mgrafana-container |[0m 
+[36mgrafana-container |[0m Please restart Grafana after installing plugins. Refer to Grafana documentation for instructions if necessary.
+[36mgrafana-container |[0m 
+[36mgrafana-container |[0m ✔ Downloaded and extracted grafana-simple-json-datasource v1.4.2 zip successfully to /var/lib/grafana/plugins/grafana-simple-json-datasource
+[36mgrafana-container |[0m 
+[36mgrafana-container |[0m Please restart Grafana after installing plugins. Refer to Grafana documentation for instructions if necessary.
+[36mgrafana-container |[0m 
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.914400467-05:00 level=info msg="Starting Grafana" version=9.3.6 commit=978237e7cb branch=HEAD compiled=2023-01-26T09:38:58-05:00
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.915789902-05:00 level=info msg="Config loaded from" file=/usr/share/grafana/conf/defaults.ini
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.916277324-05:00 level=info msg="Config loaded from" file=/etc/grafana/grafana.ini
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.916706867-05:00 level=info msg="Config overridden from command line" arg="default.paths.data=/var/lib/grafana"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.917070447-05:00 level=info msg="Config overridden from command line" arg="default.paths.logs=/var/log/grafana"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.917399876-05:00 level=info msg="Config overridden from command line" arg="default.paths.plugins=/var/lib/grafana/plugins"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.917882955-05:00 level=info msg="Config overridden from command line" arg="default.paths.provisioning=/etc/grafana/provisioning"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.918207725-05:00 level=info msg="Config overridden from command line" arg="default.log.mode=console"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.918627961-05:00 level=info msg="Config overridden from Environment variable" var="GF_PATHS_DATA=/var/lib/grafana"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.918956522-05:00 level=info msg="Config overridden from Environment variable" var="GF_PATHS_LOGS=/var/log/grafana"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.91927506-05:00 level=info msg="Config overridden from Environment variable" var="GF_PATHS_PLUGINS=/var/lib/grafana/plugins"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.919644912-05:00 level=info msg="Config overridden from Environment variable" var="GF_PATHS_PROVISIONING=/etc/grafana/provisioning"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.919978194-05:00 level=info msg="Config overridden from Environment variable" var="GF_SECURITY_ADMIN_USER=admin"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.920300457-05:00 level=info msg="Config overridden from Environment variable" var="GF_SECURITY_ADMIN_PASSWORD=*********"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.920691987-05:00 level=info msg="Config overridden from Environment variable" var="GF_USERS_ALLOW_SIGN_UP=false"
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.920783243-05:00 level=info msg="Path Home" path=/usr/share/grafana
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.920862756-05:00 level=info msg="Path Data" path=/var/lib/grafana
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.921261605-05:00 level=info msg="Path Logs" path=/var/log/grafana
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.921413961-05:00 level=info msg="Path Plugins" path=/var/lib/grafana/plugins
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.92185377-05:00 level=info msg="Path Provisioning" path=/etc/grafana/provisioning
+[36mgrafana-container |[0m logger=settings t=2023-02-15T09:38:52.921933196-05:00 level=info msg="App mode production"
+[36mgrafana-container |[0m logger=sqlstore t=2023-02-15T09:38:52.922086644-05:00 level=info msg="Connecting to DB" dbtype=sqlite3
+[36mgrafana-container |[0m logger=migrator t=2023-02-15T09:38:52.990448156-05:00 level=info msg="Starting DB migrations"
+[36mgrafana-container |[0m logger=migrator t=2023-02-15T09:38:53.036980039-05:00 level=info msg="migrations completed" performed=0 skipped=464 duration=3.382858ms
+[36mgrafana-container |[0m logger=plugin.loader t=2023-02-15T09:38:53.258502371-05:00 level=info msg="Plugin registered" pluginID=input
+[36mgrafana-container |[0m logger=plugin.loader t=2023-02-15T09:38:53.306531749-05:00 level=info msg="Plugin registered" pluginID=grafana-clock-panel
+[36mgrafana-container |[0m logger=plugin.loader t=2023-02-15T09:38:53.307221721-05:00 level=info msg="Plugin registered" pluginID=grafana-simple-json-datasource
+[36mgrafana-container |[0m logger=secrets t=2023-02-15T09:38:53.318379707-05:00 level=info msg="Envelope encryption state" enabled=true currentprovider=secretKey.v1
+[36mgrafana-container |[0m logger=query_data t=2023-02-15T09:38:53.323644288-05:00 level=info msg="Query Service initialization"
+[36mgrafana-container |[0m logger=live.push_http t=2023-02-15T09:38:53.359345828-05:00 level=info msg="Live Push Gateway initialization"
+[36mgrafana-container |[0m logger=infra.usagestats.collector t=2023-02-15T09:38:54.474018926-05:00 level=info msg="registering usage stat providers" usageStatsProvidersLen=2
+[36mgrafana-container |[0m logger=provisioning.datasources t=2023-02-15T09:38:54.513569406-05:00 level=info msg="deleted correlations based on configuration" ds_name=Prometheus
+[36mgrafana-container |[0m logger=provisioning.datasources t=2023-02-15T09:38:54.514210273-05:00 level=info msg="deleted datasource based on configuration" name=Prometheus
+[36mgrafana-container |[0m logger=provisioning.datasources t=2023-02-15T09:38:54.514877253-05:00 level=info msg="inserting datasource from configuration " name=Prometheus uid=PBFA97CFB590B2093
+[36mgrafana-container |[0m logger=provisioning.plugins t=2023-02-15T09:38:54.606140311-05:00 level=error msg="Failed to read plugin provisioning files from directory" path=/etc/grafana/provisioning/plugins error="open /etc/grafana/provisioning/plugins: no such file or directory"
+[36mgrafana-container |[0m logger=provisioning.notifiers t=2023-02-15T09:38:54.607083736-05:00 level=error msg="Can't read alert notification provisioning files from directory" path=/etc/grafana/provisioning/notifiers error="open /etc/grafana/provisioning/notifiers: no such file or directory"
+[36mgrafana-container |[0m logger=provisioning.alerting t=2023-02-15T09:38:54.607683294-05:00 level=error msg="can't read alerting provisioning files from directory" path=/etc/grafana/provisioning/alerting error="open /etc/grafana/provisioning/alerting: no such file or directory"
+[36mgrafana-container |[0m logger=provisioning.alerting t=2023-02-15T09:38:54.608074868-05:00 level=info msg="starting to provision alerting"
+[36mgrafana-container |[0m logger=provisioning.alerting t=2023-02-15T09:38:54.608425407-05:00 level=info msg="finished to provision alerting"
+[36mgrafana-container |[0m logger=http.server t=2023-02-15T09:38:54.625258452-05:00 level=info msg="HTTP Server Listen" address=[::]:3000 protocol=http subUrl= socket=
+[36mgrafana-container |[0m logger=ngalert.state.manager t=2023-02-15T09:38:54.625902695-05:00 level=info msg="Warming state cache for startup"
+[36mgrafana-container |[0m logger=grafanaStorageLogger t=2023-02-15T09:38:54.645828145-05:00 level=info msg="storage starting"
+[36mgrafana-container |[0m logger=ngalert.state.manager t=2023-02-15T09:38:54.653880751-05:00 level=info msg="State cache has been initialized" states=0 duration=27.976792ms
+[36mgrafana-container |[0m logger=ticker t=2023-02-15T09:38:54.6554158-05:00 level=info msg=starting first_tick=2023-02-15T09:39:00-05:00
+[36mgrafana-container |[0m logger=ngalert.multiorg.alertmanager t=2023-02-15T09:38:54.655888848-05:00 level=info msg="starting MultiOrg Alertmanager"
+[36mgrafana-container |[0m logger=context userId=1 orgId=1 uname=admin t=2023-02-15T09:38:56.402140549-05:00 level=info msg="Request Completed" method=GET path=/api/live/ws status=-1 remote_addr=172.18.0.1 time_ms=16 duration=16.190845ms size=0 referer= handler=/api/live/ws
+[36mgrafana-container |[0m logger=live t=2023-02-15T09:38:56.407408249-05:00 level=info msg="Initialized channel handler" channel=grafana/dashboard/uid/ZrT9hpJVk address=grafana/dashboard/uid/ZrT9hpJVk
+[33mprometheus-container |[0m ts=2023-02-15T14:39:37.707Z caller=notifier.go:532 level=error component=notifier alertmanager=http://alertmanager:9093/api/v2/alerts count=2 msg="Error sending alert" err="Post \"http://alertmanager:9093/api/v2/alerts\": dial tcp: lookup alertmanager on 127.0.0.11:53: server misbehaving"
+[36mgrafana-container |[0m logger=server t=2023-02-15T09:40:04.04517079-05:00 level=info msg="Shutdown started" reason="System signal: terminated"
+[36mgrafana-container |[0m logger=ticker t=2023-02-15T09:40:04.04523032-05:00 level=info msg=stopped last_tick=2023-02-15T09:40:00-05:00
+[36mgrafana-container |[0m logger=tracing t=2023-02-15T09:40:04.045430704-05:00 level=info msg="Closing tracing"
+[36mgrafana-container exited with code 0
+[0m[33mprometheus-container |[0m ts=2023-02-15T14:40:05.107Z caller=main.go:828 level=warn msg="Received SIGTERM, exiting gracefully..."
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.107Z caller=main.go:852 level=info msg="Stopping scrape discovery manager..."
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.107Z caller=main.go:866 level=info msg="Stopping notify discovery manager..."
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.107Z caller=manager.go:988 level=info component="rule manager" msg="Stopping rule manager..."
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.107Z caller=manager.go:998 level=info component="rule manager" msg="Rule manager stopped"
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.107Z caller=main.go:903 level=info msg="Stopping scrape manager..."
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.107Z caller=main.go:848 level=info msg="Scrape discovery manager stopped"
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.108Z caller=main.go:862 level=info msg="Notify discovery manager stopped"
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.117Z caller=main.go:895 level=info msg="Scrape manager stopped"
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.117Z caller=notifier.go:606 level=info component=notifier msg="Stopping notification manager..."
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.117Z caller=main.go:1123 level=info msg="Notifier manager stopped"
+[33mprometheus-container |[0m ts=2023-02-15T14:40:05.117Z caller=main.go:1135 level=info msg="See you next time!"
+[33mprometheus-container exited with code 0
+[0m

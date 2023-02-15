@@ -22,7 +22,7 @@ scrape_configs:
     # Override global default & scrape targets from this job
     scrape_interval: 5s
     static_configs:
-      - targets: ['prometheus-container:9095']
+      - targets: ['prometheus-container:9090']
 
   - job_name: 'API-GATEWAY'
     scrape_interval: 5s
