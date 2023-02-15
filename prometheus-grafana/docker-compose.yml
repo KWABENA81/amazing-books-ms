@@ -9,51 +9,49 @@ services:
     container_name: prometheus-container
     image: prom/prometheus 
     volumes:
-      - "./prometheus/:/etc/prometheus/"
-      - "prom_data/:/var/lib/prometheus/"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
+      - "prom_data/:/var/lib/prometheus/"
+      - "./prometheus/:/etc/prometheus/"
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.templates=/usr/share/prometheus/console'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.listen-address=0.0.0.0:9095'
-      # - '--storage.tsdb.path=/var/lib/prometheus'
-      # - '--web.console.templates=/etc/prometheus/consoles'      
-      # - '--web.console.libraries=/etc/prometheus/console_libraries'#  
+      - '--web.listen-address=0.0.0.0:9090'
     ports:
-      - "9095:9095"
+      - "9090:9090"
     networks:
-      - microservice_net
+      amazingms_net:
+        ipv4_address: 172.20.0.9
        # restart: unless-stopped
 
   grafana:
     container_name: grafana-container
-    image: grafana/grafana
+    image: grafana/grafana-oss
     #user: "$UID:$GID"
     environment:
-      GF_INSTALL_PLUGINS: 'grafana-clock-panel,grafana-simple-json-datasource'
+      GF_INSTALL_PLUGINS: 'grafana-clock-panel,grafana-simple-json-datasource,vonage-status-panel'
       #   GF_SECURITY_ADMIN_PASSWORD: admin
       #   GF_SERVER_DOMAIN: localhost
-    volumes:     
+    volumes: 
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"    
       - graf_data/:/var/lib/grafana/    
       - ./grafana/provisioning/:/etc/grafana/provisioning/
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/etc/localtime:/etc/localtime:ro"
     env_file:
       - ./grafana/config
     ports:
-      - "3030:3000"
+      - "3000:3000"
     networks:
-      - microservice_net
+      amazingms_net:
+        ipv4_address: 172.20.0.10
     # ----restart: unless-stopped
     depends_on:
       - prometheus
 
 networks:
-  microservice_net:
-    name: microservice_net
-    driver: bridge
-
-
+  amazingms_net:
+    external: 
+      name: amazing-books-ms_amazingms_net  #amazingms_net
+      

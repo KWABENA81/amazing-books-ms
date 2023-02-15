@@ -21,3 +21,7 @@ docker build -t kwabena81/issuerms-image:0.0.1 .
 cd ~/Documents/edureka/book-issuer-ms && clear
 docker-compose up
 
+
+
+PROMETHEUS
+uri="/actuator/prometheus"

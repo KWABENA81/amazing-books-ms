@@ -14,7 +14,8 @@ services:
     expose:
       - '8761'
     networks:
-      - microservice_net
+      amazingms_net:
+        ipv4_address: 172.20.0.4
     volumes: 
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro' 
@@ -31,7 +32,8 @@ services:
     expose:
       - '9195'
     networks:
-      - microservice_net
+      amazingms_net:
+        ipv4_address: 172.20.0.5
     volumes:
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
@@ -52,7 +54,8 @@ services:
     expose:
       - '8989'
     networks:
-      - microservice_net
+      amazingms_net:
+        ipv4_address: 172.20.0.6
     volumes: 
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro' 
@@ -73,7 +76,8 @@ services:
     expose:
       - '8097'
     networks:
-      - microservice_net
+      amazingms_net:
+        ipv4_address: 172.20.0.7
     volumes:
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
@@ -94,7 +98,8 @@ services:
     expose:
       - '8099'
     networks:
-      - microservice_net
+      amazingms_net:
+        ipv4_address: 172.20.0.8
     volumes:
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
@@ -104,13 +109,10 @@ services:
       - api-gateway
 
 networks:
-  microservice_net:
-    name: microservice_net
+  amazingms_net:
     driver: bridge
-
-
-
-
-
-
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16 
+          gateway: 172.20.0.1
 
