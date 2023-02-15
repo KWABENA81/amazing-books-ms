@@ -1,4 +1,4 @@
-package com.edu.oauth2service.config;
+package com.edu.oauth2service;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -46,8 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                //               .authorizeRequests().anyRequest().permitAll();
-                .authorizeRequests().anyRequest().authenticated().and()
-                .formLogin().loginPage("/login").permitAll();
+                .authorizeRequests().anyRequest().permitAll();
+//                .authorizeRequests().anyRequest().authenticated().and()
+//                .formLogin().loginPage("/login").permitAll();
     }
 }

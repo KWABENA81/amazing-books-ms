@@ -6,8 +6,8 @@ spring:
     name: EUREKA-SERVICE
 eureka:
   instance:
-    hostname: localhost
-    #port: ${server.port}
+    prefer-ip-address: true
+    hostname: ${spring.application.name}
   client:
     register-with-eureka: false
     fetch-registry: false
@@ -21,7 +21,7 @@ eureka:
 # logging
 logging:
   file:
-    path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
+    path: ${HOME}/ms_logs/${spring.application.name}-logs
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG

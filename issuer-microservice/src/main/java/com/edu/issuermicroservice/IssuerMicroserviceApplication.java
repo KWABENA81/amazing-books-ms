@@ -19,8 +19,7 @@ public class IssuerMicroserviceApplication {
         SpringApplication.run(IssuerMicroserviceApplication.class, args);
     }
 
-    @Bean
-   // @LoadBalanced
+    @Bean    // @LoadBalanced
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

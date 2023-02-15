@@ -18,7 +18,7 @@ ADD target/api-gateway-"${VERSION}"-SNAPSHOT.jar gateway-app.jar
 #
 RUN sh -c 'touch /gateway-app.jar'
 
-EXPOSE 8181
+EXPOSE 8989
 
 #   entrypoint
 ENTRYPOINT ["java", "-jar", "/gateway-app.jar"]

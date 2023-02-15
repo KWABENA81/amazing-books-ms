@@ -1,4 +1,4 @@
-package com.edu.apigateway.filter;
+package com.edu.apigateway;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +15,10 @@ public class CustomFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain filterChain) {
         log.info("Initial Pre Global Filter...");
-        return filterChain.filter(exchange)
-                .then(Mono.fromRunnable(() -> {
-                    log.info("...Last Post Global Filter...");
-                }));
+        return filterChain.filter(exchange);
+//                .then(Mono.fromRunnable(() -> {
+//                    log.info("...Last Post Global Filter...");
+//                }));
     }
 
     @Override

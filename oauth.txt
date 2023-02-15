@@ -1,32 +1,15 @@
 $ curl -v -X POST -u client:secret 'http://localhost:9195/oauth/token?grant_type=password&username=john&password=passw0rd123&scope=read'
-*   Trying 127.0.0.1:9195...
-* Connected to localhost (127.0.0.1) port 9195 (#0)
-* Server auth using Basic with user 'client'
-> POST /oauth/token?grant_type=password&username=john&password=passw0rd123&scope=read HTTP/1.1
-> Host: localhost:9195
-> Authorization: Basic Y2xpZW50OnNlY3JldA==
-> User-Agent: curl/7.81.0
-> Accept: */*
-> 
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 200 
-< Cache-Control: no-store
-< Pragma: no-cache
-< X-Content-Type-Options: nosniff
-< X-XSS-Protection: 1; mode=block
-< X-Frame-Options: DENY
-< Content-Type: application/json;charset=UTF-8
-< Transfer-Encoding: chunked
-< Date: Wed, 18 Jan 2023 13:25:17 GMT
-< 
-* Connection #0 to host localhost left intact
+
 {
-    "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzQwOTE1MTcsInVzZXJfbmFtZSI6ImpvaG4iLCJhdXRob3JpdGllcyI6WyJyZWFkIl0sImp0aSI6IlVWVmw1dzNJSmxmQkkzcG1aYTktQ1JuRTZfNCIsImNsaWVudF9pZCI6ImNsaWVudCIsInNjb3BlIjpbInJlYWQiXX0.EcD6GpPHK4Fc9nrN0JSfCXZQuuhbvnPZbDA0fIjzjTk",
-    "token_type":"bearer",
-    "refresh_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJqb2huIiwic2NvcGUiOlsicmVhZCJdLCJhdGkiOiJVVlZsNXczSUpsZkJJM3BtWmE5LUNSbkU2XzQiLCJleHAiOjE2NzY2NDAzMTcsImF1dGhvcml0aWVzIjpbInJlYWQiXSwianRpIjoiSDZoelJKQkY3ZnVhRGxLNlJacjBYMUQweEJjIiwiY2xpZW50X2lkIjoiY2xpZW50In0.re1IRQ41TZBOQyw1B4-X1g5jTt0ftE_Isy4fiMwYKig",
-    "expires_in":43199,
-    "scope":"read",
-    "jti":"UVVl5w3IJlfBI3pmZa9-CRnE6_4"}
+"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzY0NDcyMTgsInVzZXJfbmFtZSI6ImpvaG4iLCJhdXRob3JpdGllcyI6WyJyZWFkIl0sImp0aSI6InZMWUVENGVXaG4wRmJCQzlxOEFzNFVBeHZoQSIsImNsaWVudF9pZCI6ImNsaWVudCIsInNjb3BlIjpbInJlYWQiXX0.wQDrBPScNkol15zPtoFDLG7MVsu8XD6FMPJ08OJc6nY",
+"token_type":"bearer",
+"refresh_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJqb2huIiwic2NvcGUiOlsicmVhZCJdLCJhdGkiOiJ2TFlFRDRlV2huMEZiQkM5cThBczRVQXh2aEEiLCJleHAiOjE2Nzg5OTYwMTgsImF1dGhvcml0aWVzIjpbInJlYWQiXSwianRpIjoiZHliUnQxMW1vZTRoUVNwZ1M3cnBqQ1FJMmlVIiwiY2xpZW50X2lkIjoiY2xpZW50In0.kbfDNg-Tr8l_mugQX9sO6XxUIqKDaHcgf--41mnrXvQ",
+"expires_in":43199,
+"scope":"read",
+"jti":"vLYED4eWhn0FbBC9q8As4UAxvhA"
+}
+    
+    
 #####################################################################       #2
 $ curl -v -X POST -u client:secret 'http://localhost:9195/oauth/token?grant_type=password&username=john&password=passw0rd123&scope=read'>oauth.txt
 *   Trying 127.0.0.1:9195...
@@ -223,7 +206,51 @@ $ cat oauth.txt
     "expires_in":43199,
     "scope":"read",
     "jti":"n_6k1hfPiVdehPRWifR7SJygWFU"
-}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzY0NDcyMTgsInVzZXJfbmFtZSI6ImpvaG4iLCJhdXRob3JpdGllcyI6WyJyZWFkIl0sImp0aSI6InZMWUVENGVXaG4wRmJCQzlxOEFzNFVBeHZoQSIsImNsaWVudF9pZCI6ImNsaWVudCIsInNjb3BlIjpbInJlYWQiXX0.wQDrBPScNkol15zPtoFDLG7MVsu8XD6FMPJ08OJc6nY",
+    
+    
+    
+    
+===============
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzY0NDcyMTgsInVzZXJfbmFtZSI6ImpvaG4iLCJhdXRob3JpdGllcyI6WyJyZWFkIl0sImp0aSI6InZMWUVENGVXaG4wRmJCQzlxOEFzNFVBeHZoQSIsImNsaWVudF9pZCI6ImNsaWVudCIsInNjb3BlIjpbInJlYWQiXX0.wQDrBPScNkol15zPtoFDLG7MVsu8XD6FMPJ08OJc6nY
+============
 
-===
-curl --location --request GET 'localhost:8097/book/books' --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzQ5OTc4OTYsInVzZXJfbmFtZSI6ImpvaG4iLCJhdXRob3JpdGllcyI6WyJyZWFkIl0sImp0aSI6Im5fNmsxaGZQaVZkZWhQUldpZlI3U0p5Z1dGVSIsImNsaWVudF9pZCI6ImNsaWVudCIsInNjb3BlIjpbInJlYWQiXX0.Iv3u9AwIT0Dla8OvKAq9onz_8DdzHWKoAiBZXgA0OZA'
+
+
+
+
+
+
+ation --request GET 'localhost:8097/book/books' --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzQ5OTc4OTYsInVzZXJfbmFtZSI6ImpvaG4iLCJhdXRob3JpdGllcyI6WyJyZWFkIl0sImp0aSI6Im5fNmsxaGZQaVZkZWhQUldpZlI3U0p5Z1dGVSIsImNsaWVudF9pZCI6ImNsaWVudCIsInNjb3BlIjpbInJlYWQiXX0.Iv3u9AwIT0Dla8OvKAq9onz_8DdzHWKoAiBZXgA0OZA'

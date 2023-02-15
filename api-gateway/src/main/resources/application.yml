@@ -2,8 +2,8 @@ server:
   port: 8989
   error:
     path: /error
-    whitelabel:
-      enabled: false
+#    whitelabel:
+#      enabled: false
 
 spring:
   application:
@@ -61,7 +61,8 @@ eureka:
     healthcheck:
       enabled: true
   instance:
-    hostname: localhost
+    prefer-ip-address: true
+    hostname: ${spring.application.name}
 
 # info endpoints configuration
 info:
@@ -77,7 +78,7 @@ management:
   endpoints:
     web:
       exposure:
-        include:  ["health","prometheus","metrics","gateway"]
+        include: ["health","prometheus","metrics","gateway","info"]
       base-path: /actuator
   endpoint:
     metrics:
@@ -90,7 +91,7 @@ management:
 # logging
 logging:
   file:
-    path:  /home/sask/Documents/edureka/ms_logs/${spring.application.name}-logs
+    path:  ${HOME}/Documents/ms_logs/${spring.application.name}-logs
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG

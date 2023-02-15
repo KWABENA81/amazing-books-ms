@@ -9,7 +9,7 @@ services:
     container_name: prometheus-container
     image: prom/prometheus 
     volumes:
-      - ./prometheus/:/etc/prometheus/
+      - "./prometheus/:/etc/prometheus/"
       - "prom_data/:/var/lib/prometheus/"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
@@ -26,9 +26,7 @@ services:
       - "9095:9095"
     networks:
       - microservice_net
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    #  --- # restart: unless-stopped
+       # restart: unless-stopped
 
   grafana:
     container_name: grafana-container
@@ -49,8 +47,6 @@ services:
       - "3030:3000"
     networks:
       - microservice_net
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     # ----restart: unless-stopped
     depends_on:
       - prometheus

@@ -1,0 +1,159 @@
+NETWORK ID     NAME               DRIVER    SCOPE
+8413c46084f4   bridge             bridge    local
+f7afb02fdb12   host               host      local
+6ade9b2a3079   microservice_net   bridge    local
+80a65c2cb5a8   none               null      local
+[
+    {
+        "Name": "microservice_net",
+        "Id": "6ade9b2a3079ca85b4f7d1e11f8daf6576700edaf7244b1c049c46e741f26178",
+        "Created": "2023-02-14T15:56:09.068635781-05:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "0234a29be5505f24d0298eaab9a812a4e40c40254ebfec17e1dc5034e7c30ebf": {
+                "Name": "book-container",
+                "EndpointID": "d67a06cba8ef70224bd732cdc9a2f09c6f3803a5ddc1c18f632c52c79ae51cb7",
+                "MacAddress": "02:42:ac:12:00:05",
+                "IPv4Address": "172.18.0.5/16",
+                "IPv6Address": ""
+            },
+            "05a6adcfe6856ce245f038120aa498e200dee78e2cc65fb18c6811d7d15c68d5": {
+                "Name": "eureka-container",
+                "EndpointID": "b702f2681af8e86f90a407b250f350caab6d812690654c1026871064f39a29d9",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            },
+            "4bf441327af7b2b4a12eada9a63594a815d5de79271d795bbe50be6d5837d07a": {
+                "Name": "oauth2-container",
+                "EndpointID": "4fc71f0b838f67733d92f4ea2453721725344c089a51542c42a2c4afa49bbb4b",
+                "MacAddress": "02:42:ac:12:00:03",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            },
+            "e530507bdfc543e626e385eb127b2faa8859cf82ccd6c7b03c80e9c02d8b0b0b": {
+                "Name": "controller-gateway",
+                "EndpointID": "f57b39e5e0a9d32023a2f1291b477ba74e929798305c71642dd9f1217bd2b87f",
+                "MacAddress": "02:42:ac:12:00:04",
+                "IPv4Address": "172.18.0.4/16",
+                "IPv6Address": ""
+            },
+            "fd5c39481ca88c6d79f4cb67789d9864bdfdda18d0ee398fa0768039c7c73ebd": {
+                "Name": "issuer-container",
+                "EndpointID": "ad55de677cf606abdf07dfcb48d49e357a8c1837ee9798c3b513a851bd3483b6",
+                "MacAddress": "02:42:ac:12:00:06",
+                "IPv4Address": "172.18.0.6/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "microservice_net",
+            "com.docker.compose.project": "amazing-books-ms",
+            "com.docker.compose.version": "1.29.2"
+        }
+    }
+]
+[
+    {
+        "Name": "microservice_net",
+        "Id": "6ade9b2a3079ca85b4f7d1e11f8daf6576700edaf7244b1c049c46e741f26178",
+        "Created": "2023-02-14T15:56:09.068635781-05:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "0234a29be5505f24d0298eaab9a812a4e40c40254ebfec17e1dc5034e7c30ebf": {
+                "Name": "book-container",
+                "EndpointID": "d67a06cba8ef70224bd732cdc9a2f09c6f3803a5ddc1c18f632c52c79ae51cb7",
+                "MacAddress": "02:42:ac:12:00:05",
+                "IPv4Address": "172.18.0.5/16",
+                "IPv6Address": ""
+            },
+            "05a6adcfe6856ce245f038120aa498e200dee78e2cc65fb18c6811d7d15c68d5": {
+                "Name": "eureka-container",
+                "EndpointID": "b702f2681af8e86f90a407b250f350caab6d812690654c1026871064f39a29d9",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            },
+            "4bf441327af7b2b4a12eada9a63594a815d5de79271d795bbe50be6d5837d07a": {
+                "Name": "oauth2-container",
+                "EndpointID": "4fc71f0b838f67733d92f4ea2453721725344c089a51542c42a2c4afa49bbb4b",
+                "MacAddress": "02:42:ac:12:00:03",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            },
+            "b571cd23300a0e649547ecce40e9198eedc2ac8b9a43d91b6d6b2f14850a2ccf": {
+                "Name": "grafana-container",
+                "EndpointID": "aca93a79a32d7d7ab9537ebffc022aac49e6da4b5fbd5abcd7154193ee3ec4bd",
+                "MacAddress": "02:42:ac:12:00:08",
+                "IPv4Address": "172.18.0.8/16",
+                "IPv6Address": ""
+            },
+            "bda670aa107417ab4fc0778cf8a5f84275ad32293cfefc741f5b0d3ac162c074": {
+                "Name": "prometheus-container",
+                "EndpointID": "2287171d56add9a7ce0705216da3d18c60bb068c7316e06debe33a40311ca187",
+                "MacAddress": "02:42:ac:12:00:07",
+                "IPv4Address": "172.18.0.7/16",
+                "IPv6Address": ""
+            },
+            "e530507bdfc543e626e385eb127b2faa8859cf82ccd6c7b03c80e9c02d8b0b0b": {
+                "Name": "controller-gateway",
+                "EndpointID": "f57b39e5e0a9d32023a2f1291b477ba74e929798305c71642dd9f1217bd2b87f",
+                "MacAddress": "02:42:ac:12:00:04",
+                "IPv4Address": "172.18.0.4/16",
+                "IPv6Address": ""
+            },
+            "fd5c39481ca88c6d79f4cb67789d9864bdfdda18d0ee398fa0768039c7c73ebd": {
+                "Name": "issuer-container",
+                "EndpointID": "ad55de677cf606abdf07dfcb48d49e357a8c1837ee9798c3b513a851bd3483b6",
+                "MacAddress": "02:42:ac:12:00:06",
+                "IPv4Address": "172.18.0.6/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "microservice_net",
+            "com.docker.compose.project": "amazing-books-ms",
+            "com.docker.compose.version": "1.29.2"
+        }
+    }
+]
