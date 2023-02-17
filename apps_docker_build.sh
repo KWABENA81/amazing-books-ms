@@ -10,5 +10,5 @@ cd ~/Documents/edureka/amazing-books-ms/book-microservice && mvn clean package &
 cd ~/Documents/edureka/amazing-books-ms/issuer-microservice && mvn clean package && docker build -t kwabena81/issuerms-image:0.0.1 . 
 
 cd ~/Documents/edureka/amazing-books-ms 
-docker-compose up 
+
 

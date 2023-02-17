@@ -2,8 +2,6 @@ server:
   port: 8989
   error:
     path: /error
-#    whitelabel:
-#      enabled: false
 
 spring:
   application:
@@ -56,10 +54,11 @@ eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
-    serviceUrl:
-      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}    #http://localhost:8761/eureka
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
     healthcheck:
       enabled: true
+    enabled: true
   instance:
     prefer-ip-address: true
     hostname: ${spring.application.name}
@@ -78,7 +77,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: ["health","prometheus","metrics","gateway","info"]
+        include: ["health","prometheus","metrics","gateway"]
       base-path: /actuator
   endpoint:
     metrics:
@@ -89,11 +88,11 @@ management:
       show-details: always
 
 # logging
-logging:
-  file:
-    path:  ${HOME}/Documents/ms_logs/${spring.application.name}-logs
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
+#logging:
+#  file:
+#    path:  ${HOME}/Documents/ms_logs/${spring.application.name}-logs
+#  level:
+#    org.springframework.cloud.gateway: DEBUG
+#    reactor.netty.http.client: DEBUG
 
 
