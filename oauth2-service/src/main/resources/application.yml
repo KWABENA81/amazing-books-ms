@@ -15,18 +15,18 @@ spring:
       password: $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
 
-#    oauth2:
-#      resource-server:
-#        jwt:
-#          issuer-uri: https://idp.example.com/issuer
-#          jwk-set-uri: https://idp.example.com/.well-known/jwks.json
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: https://idp.example.com/issuer
+          jwk-set-uri: https://idp.example.com/.well-known/jwks.json
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/} # http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
     healthcheck:
       enabled: true
     enabled: true
@@ -35,13 +35,13 @@ eureka:
     hostname: ${spring.application.name}
 
 # logging
-logging:
-  file:
-    path: ${HOME}/Documents/ms_logs/${spring.application.name}-logs
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
-    org.springframework.security: DEBUG
+#logging:
+#  file:
+#    path: ${HOME}/Documents/ms_logs/${spring.application.name}-logs
+#  level:
+#    org.springframework.cloud.gateway: DEBUG
+#    reactor.netty.http.client: DEBUG
+#    org.springframework.security: DEBUG
 
 #    oauth2:
 #      client:

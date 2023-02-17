@@ -7,7 +7,7 @@ volumes:
 services:
   prometheus:
     container_name: prometheus-container
-    image: prom/prometheus 
+    image: prom/prometheus:v2.35.0 
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
@@ -28,12 +28,17 @@ services:
 
   grafana:
     container_name: grafana-container
-    image: grafana/grafana-oss
-    #user: "$UID:$GID"
+    image: grafana/grafana-oss:8.5.2
+    pull_policy: always
+    #user: admin #"$UID:$GID"
     environment:
-      GF_INSTALL_PLUGINS: 'grafana-clock-panel,grafana-simple-json-datasource,vonage-status-panel'
-      #   GF_SECURITY_ADMIN_PASSWORD: admin
-      #   GF_SERVER_DOMAIN: localhost
+      #GF_INSTALL_PLUGINS: 'grafana-clock-panel,grafana-simple-json-datasource,vonage-status-panel'
+      - GF_INSTALL_PLUGINS=https://github.com/raintank/crate-datasource/archive/master.zip;crate-datasource,grafana-clock-panel,grafana-worldmap-panel,natel-plotly-panel,grafana-simple-json-datasource,vonage-status-panel
+      #- GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_DOMAIN=localhost
+      - GF_LOG_MODE=console file
+      - GF_LOG_FILTERS=alerting.notifier.slack:debug alertmanager:debug ngalert:debug
     volumes: 
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"    
@@ -53,5 +58,5 @@ services:
 networks:
   amazingms_net:
     external: 
-      name: amazing-books-ms_amazingms_net  #amazingms_net
+      name: amazing-books-ms_amazingms_net  
       

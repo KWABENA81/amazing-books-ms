@@ -1,1 +1,2 @@
-# book-issuer-ms 
+Amazing Books application with microservices
+

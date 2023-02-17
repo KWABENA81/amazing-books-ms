@@ -2,8 +2,6 @@ server:
   port: 8099
   error:
     path: /error
-#    whitelabel:
-#      enabled: true
 
 spring:
   application:
@@ -43,11 +41,11 @@ spring:
       name: User
       password: password  # $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
       roles: USER, ADMIN
-#    oauth2:
-#      resource-server:
-#        jwt:
-#          issuer-uri: https://idp.example.com/issuer
-#          jwk-set-uri: https://idp.example.com/.well-known/jwks.json
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: https://idp.example.com/issuer
+          jwk-set-uri: https://idp.example.com/.well-known/jwks.json
 
 app:
   security:
@@ -81,7 +79,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: ["health","prometheus","metrics","info"]
+        include: ["health","prometheus","metrics"]
       base-path: /actuator
   endpoint:
     metrics:
@@ -96,7 +94,7 @@ management:
         enabled: true
 
 # logging
-logging:
-  file:
-    path: ${HOME}/Documents/ms_logs/${spring.application.name}-logs
+#logging:
+#  file:
+#    path: ${HOME}/Documents/ms_logs/${spring.application.name}-logs
 

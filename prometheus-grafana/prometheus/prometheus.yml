@@ -1,50 +1,33 @@
 # global config
 global:
-  scrape_interval: 15s 	
-  evaluation_interval: 15s 	
-
-# Load and evaluate rules in this file every 'evaluation_interval' seconds.
-rule_files:
-  - 'alert.rules'
-
-# alert
-alerting:
-  alertmanagers:
-    - scheme: http
-    - static_configs:
-      - targets: 
-        - "alertmanager:9093"
+  scrape_interval: 25s 	
+  evaluation_interval: 25s 	
 
 # Prometheus self monitoring
 scrape_configs:
   - job_name: 'prometheus'
-    # Override global default & scrape targets from this job
-    scrape_interval: 15s
-    static_configs:
-      - targets: ['prometheus-container:9090']
-
-  - job_name: 'API-GATEWAY'
     scrape_interval: 5s
-    metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['172.20.0.6:8989']
-        labels:
-          group: 'API-GATEWAY MONITOR'
+      - targets: ['172.20.0.9:9090']
 
-  - job_name: 'BOOK-MICROSERVICE'
-    # Override global default & scrape targets from this job
-    metrics_path: '/actuator/prometheus'
+  - job_name: 'BOOK-MICROSERVICE Service Input'
+    metrics_path: '/actuator/prometheus' 
     scrape_interval: 5s
     static_configs:
       - targets: ['172.20.0.7:8097']
         labels:
-          group: 'BOOK-MICROSERVICE MONITOR'
+          application: 'BOOK-MICROSERVICE'
+    basic_auth:
+      username: User
+      password: "password"
 
-  - job_name: 'ISSUER-MICROSERVICE'
-    # Override global default & scrape targets from this job
-    metrics_path: '/actuator/prometheus'
+  - job_name: 'ISSUER-MICROSERVICE Service Input'
+    metrics_path: '/actuator/prometheus' 
     scrape_interval: 5s
     static_configs:
       - targets: ['172.20.0.8:8099']
         labels:
-          group: 'ISSUER-MICROSERVICE MONITOR'
+          application: 'ISSUER-MICROSERVICE'
+    basic_auth:
+      username: User
+      password: "password"
