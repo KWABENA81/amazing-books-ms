@@ -16,9 +16,7 @@ public class CustomFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain filterChain) {
         log.info("Initial Pre Global Filter...");
         return filterChain.filter(exchange);
-//                .then(Mono.fromRunnable(() -> {
-//                    log.info("...Last Post Global Filter...");
-//                }));
+    // .then(Mono.fromRunnable(() -> {  log.info("...Last Post Global Filter...");  }));
     }
 
     @Override

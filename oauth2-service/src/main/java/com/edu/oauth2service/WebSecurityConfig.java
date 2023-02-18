@@ -19,21 +19,24 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
     @Bean
     public UserDetailsService uds() {
-        UserDetails john = User.withUsername("john").password("passw0rd123")     //.roles("USER")
+        UserDetails john = User.withUsername("john").password("passw0rd123")
                 .authorities("read").build();
-        UserDetails user = User.withUsername("user").password("passw0rd123")
-                //.password("{bcrypt}$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq").roles("USER")
-                .authorities("read").build();
-        UserDetails edureka = User.withUsername("Edureka").password("passw0rd123")
-                //.password("{bcrypt}$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq").roles("USER")
-                .authorities("read").build();
-        UserDetails admin = User.withUsername("admin").password("passw0rd123")
-                //.password("{bcrypt}$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq").roles("USER", "ADMIN")
-                .authorities("read").build();
-        return new InMemoryUserDetailsManager(john, user, edureka, admin);
-        // return new InMemoryUserDetailsManager(john);
+//        UserDetails user = User.withUsername("user").password("passw0rd123")
+//                //.password("{bcrypt}$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq").roles("USER")
+//                .authorities("read").build();
+//        UserDetails edureka = User.withUsername("Edureka").password("passw0rd123")
+//                //.password("{bcrypt}$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq").roles("USER")
+//                .authorities("read").build();
+//        UserDetails admin = User.withUsername("admin").password("passw0rd123")
+//                //.password("{bcrypt}$2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq").roles("USER", "ADMIN")
+//                .authorities("read").build();
+//        return new InMemoryUserDetailsManager(john, user, edureka, admin);
+        InMemoryUserDetailsManager udm = new InMemoryUserDetailsManager();
+        udm.createUser(john);
+        return udm;
     }
 
     @Bean
@@ -44,13 +47,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-//                .csrf().disable()
-//                .authorizeRequests().anyRequest().permitAll();
-        .csrf().ignoringAntMatchers("/eureka/**");
-        super.configure(http);
+//        http.csrf().disable()// disable for this application
+//                .authorizeRequests()
+//                .antMatchers("/oauth/token").permitAll()
+//                .antMatchers("/actuator").permitAll()
+//                .antMatchers("/swagger-ui.html").permitAll()
+//                .antMatchers("/eureka/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .anonymous().disable(); //  disable anonymous
 
-//                .authorizeRequests().anyRequest().authenticated().and()
-//                .formLogin().loginPage("/login").permitAll();
+        http.csrf().disable()
+                .authorizeRequests().anyRequest().permitAll();
     }
 }

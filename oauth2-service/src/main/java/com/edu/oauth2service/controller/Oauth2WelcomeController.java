@@ -1,6 +1,7 @@
 package com.edu.oauth2service.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -12,9 +13,9 @@ public class Oauth2WelcomeController {
         return "Welcome to Spring Security - Authentication Required";
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/login")
-//    public String login() {
-//        return "login";
-//    }
+    @RequestMapping(method = RequestMethod.GET, value = "/login")
+    public String login() {
+        return "login";
+    }
 
 }
