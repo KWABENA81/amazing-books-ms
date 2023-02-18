@@ -54,6 +54,8 @@ app:
 
 eureka:
   client:
+    webclient:
+      enabled: true
     register-with-eureka: true
     fetch-registry: true
     service-url:
@@ -93,8 +95,4 @@ management:
       prometheus:
         enabled: true
 
-# logging
-#logging:
-#  file:
-#    path: ${HOME}/Documents/ms_logs/${spring.application.name}-logs
 

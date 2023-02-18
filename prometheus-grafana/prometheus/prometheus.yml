@@ -31,3 +31,14 @@ scrape_configs:
     basic_auth:
       username: User
       password: "password"
+
+  - job_name: 'API-GATEWAY Service Input'
+    metrics_path: '/actuator/prometheus' 
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.20.0.6:8099']
+        labels:
+          application: 'API-GATEWAY'
+    basic_auth:
+      username: User
+      password: "password"
