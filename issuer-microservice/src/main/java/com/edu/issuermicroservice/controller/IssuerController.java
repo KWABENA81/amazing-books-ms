@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = {"${app.security.cors.origin}"})
 @Api(value = "Issuer Class", protocols = "http")
-@RequestMapping("/issuances")
+@RequestMapping("/issuer")
 public class IssuerController {
     @Autowired
     private IssuerService issuerService;
 
     @ApiOperation(value = "Fetch all Issuances", response = Issuer.class)
-    @GetMapping
+    @GetMapping(path="/issuances")
     public ResponseEntity<List<Issuer>> issuances() {
         log.info("Start All Issuances retrieval");
         List<Issuer> issuances = issuerService.findAll().stream().collect(Collectors.toList());
