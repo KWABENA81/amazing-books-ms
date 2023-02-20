@@ -6,6 +6,10 @@ server:
 spring:
   application:
     name: ISSUER-MICROSERVICE
+  cloud:
+    config:
+      import-check:
+        enabled: false
   h2:
     console:
       enabled: true
@@ -67,6 +71,10 @@ eureka:
     prefer-ip-address: true
     hostname: ${spring.application.name}
 
+hystrix:
+  dashboard:
+    proxyStreamAllowList: '*'
+
 # info endpoints configuration
 info:
   app:
@@ -79,9 +87,12 @@ info:
 
 management:
   endpoints:
+    jmx:
+      exposure:
+        include: ["health","prometheus","metrics","hystrix.stream"]
     web:
       exposure:
-        include: ["health","prometheus","metrics"]
+        include: ["health","prometheus","metrics","hystrix.stream"]
       base-path: /actuator
   endpoint:
     metrics:
@@ -96,3 +107,14 @@ management:
         enabled: true
 
 
+#Description:
+#
+#  No spring.config.import property has been defined
+#
+#Action:
+#
+#Add a spring.config.import=configserver: property to your configuration.
+#  If configuration is not required add spring.config.import=optional:configserver: instead.
+#  To disable this check, set spring.cloud.config.enabled=false or
+#  spring.cloud.config.import-check.enabled=false.
+#

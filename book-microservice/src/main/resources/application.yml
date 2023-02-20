@@ -65,6 +65,10 @@ eureka:
     prefer-ip-address: true
     hostname: ${spring.application.name}
 
+hystrix:
+  dashboard:
+    proxyStreamAllowList: '*'
+
 # info endpoints configuration
 info:
   app:
@@ -77,10 +81,15 @@ info:
 
 management:
   endpoints:
+    jmx:
+      exposure:
+        include: ["health","prometheus","metrics","hystrix.stream"]
     web:
       exposure:
-        include: ["health","prometheus","metrics"]
+        include: ["health","prometheus","metrics","hystrix.stream"]
       base-path: /actuator
+      cors:
+        allowed-origins: true
   endpoint:
     metrics:
       enabled: true
@@ -88,6 +97,7 @@ management:
       enabled: true
     health:
       show-details: always
+      enabled: true
   metrics:
     export:
       prometheus:

@@ -79,6 +79,12 @@ public class BookService implements IBookService {
     }
 
 
+//    @HystrixCommand(fallbackMethod = "deleteBookFallback",
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
+//            })
     public boolean deleteBook(Book book) {
         //  to delete book, first check issuances
         try {
@@ -95,6 +101,12 @@ public class BookService implements IBookService {
     }
 
 
+//    @HystrixCommand(fallbackMethod = "issuancesFallback",
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
+//            })
     private List<Issuer> fetchIssuanceByIsbn(String isbn) {
         String objUrl = issuerResourceIsbnUrl + isbn;
         Issuer[] issuances = null;
@@ -104,11 +116,16 @@ public class BookService implements IBookService {
 
             log.info("Issuer fetchBookByIsbn : {}", new ObjectMapper().writeValueAsString(issuances));
             return Arrays.asList(issuances);
-
         } catch (JsonProcessingException jex) {
             log.error("Issuer fetchBookByIsbn failed: {} : {}", objUrl, jex.getMessage());
             return null;
         }
+
+
+//        public Object deleteBookFallback () {
+//            List<Issuer> issuerList = new ArrayList<>();
+//            return issuerList;
+//        }
     }
 
 }

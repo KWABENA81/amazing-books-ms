@@ -26,27 +26,27 @@ spring:
       - id: book-ms
         uri: lb://BOOK-MICROSERVICE
         predicates:
-          - Path=/book/**
+          - Path=/books/**
         #  - Method=GET,POST,DELETE
         filters:
           - name: CircuitBreaker
             args:
               name: book-ms
               fallbackuri: forward:/bookFallBack
-          - RewritePath=/book/(?<segment>.*), /$\{segment}
+          - RewritePath=/books/(?<segment>.*), /$\{segment}
           #- RedirectTo=302, /error
           #- SetPath=/book
       - id: issuer-ms
         uri: lb://ISSUER-MICROSERVICE
         predicates:
-          - Path=/issuer/**
+          - Path=/issuers/**
         #  - Method=GET,POST,DELETE
         filters:
           - name: CircuitBreaker
             args:
               name: issuer-ms
               fallbackuri: forward:/issuerFallBack
-          - RewritePath=/issuer/(?<segment>.*), /$\{segment}
+          - RewritePath=/issuers/(?<segment>.*), /$\{segment}
           #- RedirectTo=302, /error
           #- SetPath=/issuer
 

@@ -78,10 +78,16 @@ public class BookController {
     }
 
 
+    //@HystrixCommand(groupKeys = "", commandKeys = "", fallbackMethod = "deleteBookFallBack")
     @ApiOperation(value = "Delete book", response = Book.class, code = 200)
     @DeleteMapping("/deleteBook")
     public boolean deleteBook(@RequestBody Book book) {
         log.error("Delete Book {}", book.getIsbn());
         return bookService.deleteBook(book);
     }
+
+//    public Object deleteBookFallback () {
+//        List<Issuer> issuerList = new ArrayList<>();
+//        return issuerList;
+//    }
 }

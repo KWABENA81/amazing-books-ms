@@ -30,10 +30,10 @@ import java.util.*;
 @NoArgsConstructor
 public class IssuerService implements IIssuerService {
 
-    private static final String FS = "#";
-    private final String bookResourceUpdateUrl = "http://localhost:8097/books/edit/";
-    private final String bookResourceIsbnUrl = "http://localhost:8097/books/isbn/";
-    private final String bookResourceIsbnLBUrl = "http://BOOK-MICROSERVICE/books/isbn/";
+    public static final String FS = "#";
+    public final String bookResourceUpdateUrl = "http://localhost:8097/books/edit/";
+    public final String bookResourceIsbnUrl = "http://localhost:8097/books/isbn/";
+    public final String bookResourceIsbnLBUrl = "http://BOOK-MICROSERVICE/books/isbn/";
 
     @Autowired
     private IssuerRepository issuerRepository;
@@ -107,10 +107,22 @@ public class IssuerService implements IIssuerService {
                 && ((book.getTotalCopies() - book.getIssuedCopies()) > request.getIssuer().getNoOfCopies());
     }
 
+//    @HystrixCommand(fallbackMethod = "issuancesFallback",
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
+//            })
     public List<Issuer> findIssuancesByIsbn(String isbn) {
         return issuerRepository.findIssuanceByBookIsbn(isbn);
     }
 
+//    @HystrixCommand(fallbackMethod = "issuancesFallback",
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
+//            })
     public Book fetchBookByIsbn(String isbn) {
         String objUrl = bookResourceIsbnUrl + isbn;
         Book book = new Book();
