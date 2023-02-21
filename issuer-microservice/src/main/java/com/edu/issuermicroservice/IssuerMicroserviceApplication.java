@@ -10,19 +10,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
-//@EnableWebMvc
 @EnableEurekaClient
 @EnableWebSecurity
 @EnableCircuitBreaker
-//@EnableHystrix
-//@EnableHystrixDashboard
 public class IssuerMicroserviceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(IssuerMicroserviceApplication.class, args);
     }
 
-    @Bean    // @LoadBalanced
+    @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

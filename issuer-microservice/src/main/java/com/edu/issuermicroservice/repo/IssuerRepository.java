@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-//@Transactional
 public interface IssuerRepository extends JpaRepository<Issuer, Integer> {
 
     @Query("SELECT iss FROM Issuer iss WHERE iss.isbn=(:isbn)")

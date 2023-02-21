@@ -10,8 +10,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
@@ -25,11 +26,10 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 @Service
-@Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
 public class IssuerService implements IIssuerService {
-
+    Logger logger = LogManager.getLogger(IssuerService.class);
     public static final String FS = "#";
     public final String bookResourceUpdateUrl = "http://localhost:8097/books/edit/";
     public final String bookResourceIsbnUrl = "http://localhost:8097/books/isbn/";
@@ -44,11 +44,13 @@ public class IssuerService implements IIssuerService {
 
 
     public Collection<Issuer> findAll() {
+        logger.info("IssuerService : started to collect all issuers");
         return issuerRepository.findAll();
     }
 
     @Override
     public Optional<Issuer> findById(Integer id) {
+        logger.info("IssuerService : started to collect issuance with id, {}", id);
         return issuerRepository.findById(id);
     }
 
@@ -56,9 +58,9 @@ public class IssuerService implements IIssuerService {
     public boolean delete(Integer id) {
         try {
             issuerRepository.deleteById(id);
-            log.info("Issuer {} delete successful", id);
+            logger.info("Issuer {} delete successful", id);
         } catch (Exception ex) {
-            log.error("Error delete, Issuer {} exception {}", id, ex.getMessage());
+            logger.error("Error delete, Issuer {} exception {}", id, ex.getMessage());
             return false;
         }
         return true;
@@ -83,7 +85,7 @@ public class IssuerService implements IIssuerService {
             book.setIssuedCopies(oldQty + request.getIssuer().getNoOfCopies());
             ResponseEntity<IssuanceResponse> issuanceResponseRE = updateBook(book);
 
-            log.info("ResponseEntity<IssuanceResponse> of book Update {}", issuanceResponseRE);
+            logger.info("ResponseEntity<IssuanceResponse> of book Update {}", issuanceResponseRE);
             issuanceResponse = new IssuanceResponse();
             issuanceResponse.setIssuer(issuer);
 
@@ -107,30 +109,20 @@ public class IssuerService implements IIssuerService {
                 && ((book.getTotalCopies() - book.getIssuedCopies()) > request.getIssuer().getNoOfCopies());
     }
 
-//    @HystrixCommand(fallbackMethod = "issuancesFallback",
-//            commandProperties = {
-//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
-//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
-//            })
+
     public List<Issuer> findIssuancesByIsbn(String isbn) {
         return issuerRepository.findIssuanceByBookIsbn(isbn);
     }
 
-//    @HystrixCommand(fallbackMethod = "issuancesFallback",
-//            commandProperties = {
-//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
-//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
-//            })
+
     public Book fetchBookByIsbn(String isbn) {
         String objUrl = bookResourceIsbnUrl + isbn;
         Book book = new Book();
         try {
             book = restTemplate.getForObject(objUrl, Book.class);
-            log.info("Issuer fetchBookByIsbn : {}", new ObjectMapper().writeValueAsString(book));
+            logger.info("Issuer fetchBookByIsbn : {}", new ObjectMapper().writeValueAsString(book));
         } catch (JsonProcessingException jex) {
-            log.error("Issuer fetchBookByIsbn failed: {} : {}", objUrl, jex.getMessage());
+            logger.error("Issuer fetchBookByIsbn failed: {} : {}", objUrl, jex.getMessage());
         } finally {
             return book;
         }
@@ -164,11 +156,11 @@ public class IssuerService implements IIssuerService {
 
                 book.setIssuedCopies(issuedCopies + adjQty);
                 ResponseEntity<IssuanceResponse> bookResponse = updateBook(book);
-                log.info("Response of Book Update; {}", bookResponse);
+                logger.info("Response of Book Update; {}", bookResponse);
 
                 issuance.setNoOfCopies(issuer.getNoOfCopies());
                 Issuer issuerUpdate = issuerRepository.save(issuance);
-                log.info("Response of Book Update; {}", issuerUpdate);
+                logger.info("Response of Book Update; {}", issuerUpdate);
                 return true;
             } catch (Exception ex) {
                 return false;
