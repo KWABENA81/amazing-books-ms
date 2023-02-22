@@ -105,7 +105,7 @@ public class BookService implements IBookService {
             commandProperties = {
                     @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
                     @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
+                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10")
             })
     private boolean hasIssuedBooks(String isbn) {
         String objUrl = issuerResourceIsbnUrl + isbn;
