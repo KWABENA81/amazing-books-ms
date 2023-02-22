@@ -4,26 +4,31 @@ package com.edu.bookmicroservice.service;
 import com.edu.bookmicroservice.common.Issuer;
 import com.edu.bookmicroservice.entity.Book;
 import com.edu.bookmicroservice.repo.BookRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 
-@Slf4j
 @Service
 public class BookService implements IBookService {
-    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuances/isbn/";
-    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuances/isbn/";
+
+    private final Logger logger = LogManager.getLogger(BookService.class);
+    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuer/isbn/";
+    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuer/isbn/";
     @Autowired
     private BookRepository bookRepository;
 
@@ -49,7 +54,7 @@ public class BookService implements IBookService {
 
     @Override
     public void delete(Integer id) {
-        log.info(" BookService:  Book with id {} Deleted", id);
+        logger.info(" BookService:  Book with id {} Deleted", id);
         bookRepository.deleteById(id);
     }
 
@@ -59,18 +64,14 @@ public class BookService implements IBookService {
 
     public Book addBook(Book book) {
         return findByIsbn(book.getIsbn()).map(bk -> {
-            //            if found
             Integer copies = bk.getTotalCopies();
             bk.setTotalCopies(copies + book.getTotalCopies());
             return bookRepository.save(bk);
-        }).orElseGet(() -> {
-            return bookRepository.save(book);
-        });
+        }).orElseGet(() -> bookRepository.save(book));
     }
 
     public Book updateBook(Book book) {
         return findById(book.getId()).map(bk -> {
-                    //            if found
                     bk.setTotalCopies(book.getTotalCopies());
                     bk.setIssuedCopies(book.getIssuedCopies());
                     return bookRepository.save(bk);
@@ -79,36 +80,61 @@ public class BookService implements IBookService {
     }
 
 
+    @HystrixCommand(fallbackMethod = "deleteBookFallback",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10")
+            })
     public boolean deleteBook(Book book) {
-        //  to delete book, first check issuances
-        try {
-            List<Issuer> issuances = fetchIssuanceByIsbn(book.getIsbn());
-            if (issuances.isEmpty()) {
+        try {   /* To delete a book, ensure no copy of the book has been issued */
+            String objUrl = issuerResourceIsbnUrl + book.getIsbn();
+            ResponseEntity<Issuer> responseEntity = restTemplate.exchange(objUrl, HttpMethod.GET,
+                    new HttpEntity<Issuer>(createIssuerResourceHeaders(Issuer.class)),
+                    Issuer.class);
+
+            if (responseEntity == null) {
                 bookRepository.delete(book);
-                log.info("Issuer {} delete successful", book);
+                logger.info("Issuer {} delete successful", book);
             } else throw new Exception("Invalid Delete Operation");
         } catch (Exception ex) {
-            log.error("Error delete, Issuer {} exception {}", book, ex.getMessage());
+            logger.error("Error delete, Issuer {} exception {}", book, ex.getMessage());
             return false;
         }
         return true;
     }
 
-
-    private List<Issuer> fetchIssuanceByIsbn(String isbn) {
-        String objUrl = issuerResourceIsbnUrl + isbn;
-        Issuer[] issuances = null;
-        try {
-            ResponseEntity<Issuer[]> response = restTemplate.getForEntity(objUrl, Issuer[].class);
-            issuances = response.getBody();
-
-            log.info("Issuer fetchBookByIsbn : {}", new ObjectMapper().writeValueAsString(issuances));
-            return Arrays.asList(issuances);
-
-        } catch (JsonProcessingException jex) {
-            log.error("Issuer fetchBookByIsbn failed: {} : {}", objUrl, jex.getMessage());
-            return null;
-        }
+    public boolean deleteBookFallback(String isbn) {
+        return false;
     }
 
+    private HttpHeaders createIssuerResourceHeaders(Class<Issuer> clazz) {
+        return new HttpHeaders() {
+            {
+                String auth = "User" + ":" + "password";
+                byte[] encodedAuth = Base64.encodeBase64(
+                        auth.getBytes(Charset.forName("US-ASCII")));
+
+                String authHeader = "Basic " + new String(encodedAuth);
+                set("Authorization", authHeader);
+            }
+        };
+    }
 }
+
+//    private boolean hasIssuedBooks(String isbn) {
+//        String objUrl = issuerResourceIsbnUrl + isbn;
+//        ResponseEntity<Issuer> responseEntity = restTemplate.exchange(objUrl, HttpMethod.GET,
+//                new HttpEntity<Issuer>(createIssuerResourceHeaders(Issuer.class)),
+//                Issuer.class);
+//        return (responseEntity != null);
+//    }
+
+//   // private boolean hasIssuances(Book book) {
+//        return true;
+//    }
+
+//    public boolean hasIssuedBooksFallback(String isbn) {
+//        return false;
+//    }
+
