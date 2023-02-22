@@ -16,10 +16,10 @@ public class ResourceServerConfig {
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain( ServerHttpSecurity httpSecurity) {
-        httpSecurity
-                .authorizeExchange().anyExchange().authenticated()
-                .and()
-                .oauth2ResourceServer().jwt();
+//        httpSecurity
+//                .authorizeExchange().anyExchange().authenticated()
+//                .and()
+//                .oauth2ResourceServer().jwt();
         return httpSecurity.build();
     }
 

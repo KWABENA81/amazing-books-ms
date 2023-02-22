@@ -4,24 +4,29 @@ package com.edu.bookmicroservice.service;
 import com.edu.bookmicroservice.common.Issuer;
 import com.edu.bookmicroservice.entity.Book;
 import com.edu.bookmicroservice.repo.BookRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 
-@Slf4j
 @Service
 public class BookService implements IBookService {
+
+    private final Logger logger = LogManager.getLogger(BookService.class);
     private final String issuerResourceIsbnUrl = "http://localhost:8099/issuances/isbn/";
     private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuances/isbn/";
     @Autowired
@@ -49,7 +54,7 @@ public class BookService implements IBookService {
 
     @Override
     public void delete(Integer id) {
-        log.info(" BookService:  Book with id {} Deleted", id);
+        logger.info(" BookService:  Book with id {} Deleted", id);
         bookRepository.deleteById(id);
     }
 
@@ -59,18 +64,14 @@ public class BookService implements IBookService {
 
     public Book addBook(Book book) {
         return findByIsbn(book.getIsbn()).map(bk -> {
-            //            if found
             Integer copies = bk.getTotalCopies();
             bk.setTotalCopies(copies + book.getTotalCopies());
             return bookRepository.save(bk);
-        }).orElseGet(() -> {
-            return bookRepository.save(book);
-        });
+        }).orElseGet(() -> bookRepository.save(book));
     }
 
     public Book updateBook(Book book) {
         return findById(book.getId()).map(bk -> {
-                    //            if found
                     bk.setTotalCopies(book.getTotalCopies());
                     bk.setIssuedCopies(book.getIssuedCopies());
                     return bookRepository.save(bk);
@@ -79,53 +80,62 @@ public class BookService implements IBookService {
     }
 
 
-//    @HystrixCommand(fallbackMethod = "deleteBookFallback",
+    //    @HystrixCommand(fallbackMethod = "deleteBookFallback",
 //            commandProperties = {
 //                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
 //                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
 //                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
 //            })
     public boolean deleteBook(Book book) {
-        //  to delete book, first check issuances
+        /* To delete a book, ensure no copy of the book has been issued */
         try {
-            List<Issuer> issuances = fetchIssuanceByIsbn(book.getIsbn());
-            if (issuances.isEmpty()) {
+            if (!existIssuances(book)/*Delete(issuances.isEmpty()*/) {
                 bookRepository.delete(book);
-                log.info("Issuer {} delete successful", book);
+                logger.info("Issuer {} delete successful", book);
             } else throw new Exception("Invalid Delete Operation");
         } catch (Exception ex) {
-            log.error("Error delete, Issuer {} exception {}", book, ex.getMessage());
+            logger.error("Error delete, Issuer {} exception {}", book, ex.getMessage());
             return false;
         }
         return true;
     }
 
 
-//    @HystrixCommand(fallbackMethod = "issuancesFallback",
-//            commandProperties = {
-//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
-//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
-//            })
-    private List<Issuer> fetchIssuanceByIsbn(String isbn) {
+    @HystrixCommand(fallbackMethod = "hasIssuedBooksFallback",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
+            })
+    private boolean hasIssuedBooks(String isbn) {
         String objUrl = issuerResourceIsbnUrl + isbn;
-        Issuer[] issuances = null;
-        try {
-            ResponseEntity<Issuer[]> response = restTemplate.getForEntity(objUrl, Issuer[].class);
-            issuances = response.getBody();
-
-            log.info("Issuer fetchBookByIsbn : {}", new ObjectMapper().writeValueAsString(issuances));
-            return Arrays.asList(issuances);
-        } catch (JsonProcessingException jex) {
-            log.error("Issuer fetchBookByIsbn failed: {} : {}", objUrl, jex.getMessage());
-            return null;
-        }
-
-
-//        public Object deleteBookFallback () {
-//            List<Issuer> issuerList = new ArrayList<>();
-//            return issuerList;
-//        }
+        ResponseEntity<Issuer> responseEntity = restTemplate.exchange(objUrl, HttpMethod.GET,
+                new HttpEntity<Issuer>(createIssuerResourceHeaders()),
+                Issuer.class);
+        return (responseEntity != null);
     }
 
+    private boolean existIssuances(Book book) {
+        return true;
+    }
+    public boolean hasIssuedBooksFallback(String isbn) {
+        IssuanceResponse issuanceResponse = new IssuanceResponse("none",
+                new Issuer(999, "isbn", "none", 0),
+                "Service Unavailable - This is a FallBack Response");
+        return ResponseEntity.ok().body(issuanceResponse);
+    }
+    private HttpHeaders createIssuerResourceHeaders() {
+        return new HttpHeaders() {
+            {
+                String auth = "User" + ":" + "password";
+                byte[] encodedAuth = Base64.encodeBase64(
+                        auth.getBytes(Charset.forName("US-ASCII")));
+
+                String authHeader = "Basic " + new String(encodedAuth);
+                set("Authorization", authHeader);
+            }
+        };
+    }
 }
+
+

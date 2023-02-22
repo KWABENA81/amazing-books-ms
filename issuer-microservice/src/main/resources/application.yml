@@ -94,6 +94,8 @@ management:
       exposure:
         include: ["health","prometheus","metrics","hystrix.stream"]
       base-path: /actuator
+      cors:
+        allowed-origins: true
   endpoint:
     metrics:
       enabled: true

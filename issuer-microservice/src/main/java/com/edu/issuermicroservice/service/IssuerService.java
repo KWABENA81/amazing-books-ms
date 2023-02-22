@@ -6,10 +6,8 @@ import com.edu.issuermicroservice.common.IssuanceRequest;
 import com.edu.issuermicroservice.common.IssuanceResponse;
 import com.edu.issuermicroservice.model.Issuer;
 import com.edu.issuermicroservice.repo.IssuerRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,20 +18,22 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
+// @AllArgsConstructor
+// @NoArgsConstructor
 public class IssuerService implements IIssuerService {
-    Logger logger = LogManager.getLogger(IssuerService.class);
-    public static final String FS = "#";
+    private final Logger logger = LogManager.getLogger(IssuerService.class);
+    public static final String FS = "-";
     public final String bookResourceUpdateUrl = "http://localhost:8097/books/edit/";
     public final String bookResourceIsbnUrl = "http://localhost:8097/books/isbn/";
-    public final String bookResourceIsbnLBUrl = "http://BOOK-MICROSERVICE/books/isbn/";
+    public final String bookResourceIsbnLBUrl = "lb://BOOK-MICROSERVICE/isbn/";
 
     @Autowired
     private IssuerRepository issuerRepository;
@@ -71,7 +71,7 @@ public class IssuerService implements IIssuerService {
     }
 
     public IssuanceResponse doIssuance(IssuanceRequest request) {
-        Book book = fetchBookByIsbn(request.getIssuer().getIsbn());
+        Book book = fetchBookByIsbn(request.getIssuer().getIsbn()).getBody();
         IssuanceResponse issuanceResponse = null;
         if (book != null && canIssueBook(book, request)) {
             Issuer issuer = new Issuer();
@@ -83,7 +83,8 @@ public class IssuerService implements IIssuerService {
             //  update book record
             Integer oldQty = book.getIssuedCopies();
             book.setIssuedCopies(oldQty + request.getIssuer().getNoOfCopies());
-            ResponseEntity<IssuanceResponse> issuanceResponseRE = updateBook(book);
+            /* ResponseEntity<*/
+            IssuanceResponse/*>*/ issuanceResponseRE = updateBook(book).getBody();
 
             logger.info("ResponseEntity<IssuanceResponse> of book Update {}", issuanceResponseRE);
             issuanceResponse = new IssuanceResponse();
@@ -115,30 +116,55 @@ public class IssuerService implements IIssuerService {
     }
 
 
-    public Book fetchBookByIsbn(String isbn) {
-        String objUrl = bookResourceIsbnUrl + isbn;
-        Book book = new Book();
-        try {
-            book = restTemplate.getForObject(objUrl, Book.class);
-            logger.info("Issuer fetchBookByIsbn : {}", new ObjectMapper().writeValueAsString(book));
-        } catch (JsonProcessingException jex) {
-            logger.error("Issuer fetchBookByIsbn failed: {} : {}", objUrl, jex.getMessage());
-        } finally {
-            return book;
-        }
+    @HystrixCommand(fallbackMethod = "fetchBookFallback", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "11100"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "500"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "100")
+    })
+    public ResponseEntity<Book> fetchBookByIsbn(@PathVariable(value = "isbn") String isbn) {
+        logger.info("http://localhost:8097/books/isbn/" + isbn);
+        String url = bookResourceIsbnUrl/*bookResourceIsbnLBUrl*/ + isbn;
+        ResponseEntity<Book> responseEntity
+                = restTemplate.exchange(url, HttpMethod.GET,
+                new HttpEntity<Book>(createBookResourceHeaders("User", "password")),
+                Book.class);
+        return responseEntity;
     }
 
+    public ResponseEntity<Book> fetchBookFallback(@PathVariable(value = "isbn") String isbn) {
+        Book book = new Book(999, isbn, "THIS_AUTHOR",
+                "Service Unavailable - This is a FallBack Response",
+                LocalDate.now(), 1000, 0);
+        return ResponseEntity.ok().body(book);
+    }
+
+
+    @HystrixCommand(fallbackMethod = "updateBookFallback", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "500"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "100")
+    })
     private ResponseEntity<IssuanceResponse> updateBook(Book book) {
         String bookResourceUpdateUrl = this.bookResourceUpdateUrl + book.getId();
         ResponseEntity<IssuanceResponse> responseEntity
                 = restTemplate.exchange(bookResourceUpdateUrl, HttpMethod.PUT,
-                new HttpEntity<IssuanceResponse>(createHeaders("user", "Password")),
+                new HttpEntity<IssuanceResponse>(createBookResourceHeaders("User", "password")),
                 IssuanceResponse.class);
         return responseEntity;
     }
 
+    public ResponseEntity<IssuanceResponse> updateBookFallback(Book book) {
+        IssuanceResponse issuanceResponse = new IssuanceResponse("none",
+                new Issuer(999, "isbn", "none", 0),
+                "Service Unavailable - This is a FallBack Response");
+        return ResponseEntity.ok().body(issuanceResponse);
+    }
+
     public boolean updateIssuance(Issuer issuer) {
+        boolean hasUpdatedBook = false;
+        //  obtain list of the issued books
         List<Issuer> issuances = findIssuancesByIsbn(issuer.getIsbn());
+
         //  get issuer with isbn & containing customer Id
         Optional<Issuer> issuanceOptional = issuances.stream()
                 .filter(storedIssuance -> storedIssuance.getCustId()
@@ -149,28 +175,28 @@ public class IssuerService implements IIssuerService {
             try {
                 int adjQty = issuer.getNoOfCopies() - issuance.getNoOfCopies();
                 if (adjQty == 0)
-                    return false;
+                    return hasUpdatedBook;
 
-                Book book = fetchBookByIsbn(issuance.getIsbn());
+                Book book = fetchBookByIsbn(issuance.getIsbn()).getBody();
                 int issuedCopies = book.getIssuedCopies();
 
                 book.setIssuedCopies(issuedCopies + adjQty);
-                ResponseEntity<IssuanceResponse> bookResponse = updateBook(book);
+                IssuanceResponse bookResponse = updateBook(book).getBody();
                 logger.info("Response of Book Update; {}", bookResponse);
 
                 issuance.setNoOfCopies(issuer.getNoOfCopies());
                 Issuer issuerUpdate = issuerRepository.save(issuance);
                 logger.info("Response of Book Update; {}", issuerUpdate);
-                return true;
+                hasUpdatedBook = true;
             } catch (Exception ex) {
-                return false;
+                return hasUpdatedBook;
             }
         }
-        return false;
+        return hasUpdatedBook;
     }
 
 
-    private HttpHeaders createHeaders(final String uname, final String pword) {
+    private HttpHeaders createBookResourceHeaders(final String uname, final String pword) {
         return new HttpHeaders() {
             {
                 String auth = uname + ":" + pword;

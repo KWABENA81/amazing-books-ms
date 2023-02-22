@@ -47,8 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()// disable for this application
-//                .authorizeRequests()
+        http.csrf().disable()// disable for this application
+                .authorizeRequests()
 //                .antMatchers("/oauth/token").permitAll()
 //                .antMatchers("/actuator").permitAll()
 //                .antMatchers("/swagger-ui.html").permitAll()
@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .anonymous().disable(); //  disable anonymous
 
-        http.csrf().disable()
-                .authorizeRequests().anyRequest().permitAll();
+  //      http.csrf().disable()                .authorizeRequests()
+        .anyRequest().permitAll();
     }
 }

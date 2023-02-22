@@ -6,17 +6,14 @@ import com.edu.issuermicroservice.common.IssuanceResponse;
 import com.edu.issuermicroservice.exceptions.IssuerNotFoundExceptionResponseStatus;
 import com.edu.issuermicroservice.model.Issuer;
 import com.edu.issuermicroservice.service.IssuerService;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,12 +25,9 @@ import java.util.stream.Collectors;
 @Api(value = "Issuer Class", protocols = "http")
 @RequestMapping("/issuers")
 public class IssuerController {
-    private static final Logger logger= LogManager.getLogger(IssuerController.class);
+    private static final Logger logger = LogManager.getLogger(IssuerController.class);
     @Autowired
     private IssuerService issuerService;
-    @Autowired
-    @Lazy
-    private RestTemplate restTemplate;
 
     @ApiOperation(value = "Fetch all Issuances", response = Issuer.class)
     @GetMapping(path = "/issuances")
@@ -79,28 +73,10 @@ public class IssuerController {
 
     @ApiOperation(value = "Fetch Book by ISBN", response = Book.class)
     @GetMapping("/fetchBook/{isbn}")
-    @HystrixCommand(fallbackMethod = "fetchBookFallback"
-    /*,
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
-                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10")
-            }*/
-    )
-    public ResponseEntity<Book> fetchBookByIsbn(@PathVariable (value = "isbn")String isbn) {
-        Book book = restTemplate.getForObject(issuerService.bookResourceIsbnUrl + isbn, Book.class);
-        // issuerService.fetchBookByIsbn(isbn);
-        if (book != null) {
-            logger.info(" Issuer fetchBookByIsbn OK {}", book);
-            return ResponseEntity.ok().body(book);
-        } else {
-            logger.error("fetchBookByIsbn Issuer failed");
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    public ResponseEntity<Book> fetchBookFallback(@PathVariable(value = "isbn") String isbn) {
-        return ResponseEntity.ok().body(new Book());
+    public ResponseEntity<Book> fetchBook(@PathVariable(value = "isbn") String isbn) {
+        Book book = issuerService.fetchBookByIsbn(isbn).getBody();
+        logger.info("Fetching Book with isbn: {}",isbn);
+        return ResponseEntity.ok().body(book);
     }
 
     @ApiOperation(value = "Issue Book to Customer", response = IssuanceResponse.class)

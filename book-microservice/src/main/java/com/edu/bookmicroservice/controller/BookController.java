@@ -40,6 +40,7 @@ public class BookController {
     @ApiOperation(value = "Fetch book by ISBN", response = Book.class, code = 200)
     @GetMapping("/isbn/{isbn}")
     public ResponseEntity<Book> findByIsbn(@PathVariable(value = "isbn") String isbn) {
+        log.info("book is started findByIsbn {}", isbn);
         Optional<Book> bookOptional = bookService.findByIsbn(isbn);
         if (bookOptional.isPresent()) {
             log.info(" Books findByIsbn OK");
@@ -77,8 +78,6 @@ public class BookController {
         return bookService.updateBook(book);
     }
 
-
-    //@HystrixCommand(groupKeys = "", commandKeys = "", fallbackMethod = "deleteBookFallBack")
     @ApiOperation(value = "Delete book", response = Book.class, code = 200)
     @DeleteMapping("/deleteBook")
     public boolean deleteBook(@RequestBody Book book) {
@@ -86,8 +85,4 @@ public class BookController {
         return bookService.deleteBook(book);
     }
 
-//    public Object deleteBookFallback () {
-//        List<Issuer> issuerList = new ArrayList<>();
-//        return issuerList;
-//    }
 }

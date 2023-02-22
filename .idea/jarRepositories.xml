@@ -21,5 +21,10 @@
       <option name="name" value="Splunk Releases" />
       <option name="url" value="https://splunk.jfrog.io/splunk/ext-releases-local" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="splunk-artifactory" />
+      <option name="name" value="Splunk Releases" />
+      <option name="url" value="https://splunk.artifactoryonline.com/artifactory/ext-releases-local" />
+    </remote-repository>
   </component>
 </project>
