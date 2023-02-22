@@ -27,8 +27,8 @@ import java.util.Optional;
 public class BookService implements IBookService {
 
     private final Logger logger = LogManager.getLogger(BookService.class);
-    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuances/isbn/";
-    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuances/isbn/";
+    private final String issuerResourceIsbnUrl = "http://localhost:8099/issuer/isbn/";
+    private final String issuerResourceIsbnLBUrl = "http://ISSUER-MICROSERVICE/issuer/isbn/";
     @Autowired
     private BookRepository bookRepository;
 
@@ -80,16 +80,20 @@ public class BookService implements IBookService {
     }
 
 
-    //    @HystrixCommand(fallbackMethod = "deleteBookFallback",
-//            commandProperties = {
-//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
-//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThrehold", value = "10")
-//            })
+    @HystrixCommand(fallbackMethod = "deleteBookFallback",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
+                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10")
+            })
     public boolean deleteBook(Book book) {
-        /* To delete a book, ensure no copy of the book has been issued */
-        try {
-            if (!existIssuances(book)/*Delete(issuances.isEmpty()*/) {
+        try {   /* To delete a book, ensure no copy of the book has been issued */
+            String objUrl = issuerResourceIsbnUrl + book.getIsbn();
+            ResponseEntity<Issuer> responseEntity = restTemplate.exchange(objUrl, HttpMethod.GET,
+                    new HttpEntity<Issuer>(createIssuerResourceHeaders(Issuer.class)),
+                    Issuer.class);
+
+            if (responseEntity == null) {
                 bookRepository.delete(book);
                 logger.info("Issuer {} delete successful", book);
             } else throw new Exception("Invalid Delete Operation");
@@ -100,31 +104,11 @@ public class BookService implements IBookService {
         return true;
     }
 
-
-    @HystrixCommand(fallbackMethod = "hasIssuedBooksFallback",
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000"),
-                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10")
-            })
-    private boolean hasIssuedBooks(String isbn) {
-        String objUrl = issuerResourceIsbnUrl + isbn;
-        ResponseEntity<Issuer> responseEntity = restTemplate.exchange(objUrl, HttpMethod.GET,
-                new HttpEntity<Issuer>(createIssuerResourceHeaders()),
-                Issuer.class);
-        return (responseEntity != null);
+    public boolean deleteBookFallback(String isbn) {
+        return false;
     }
 
-    private boolean existIssuances(Book book) {
-        return true;
-    }
-    public boolean hasIssuedBooksFallback(String isbn) {
-        IssuanceResponse issuanceResponse = new IssuanceResponse("none",
-                new Issuer(999, "isbn", "none", 0),
-                "Service Unavailable - This is a FallBack Response");
-        return ResponseEntity.ok().body(issuanceResponse);
-    }
-    private HttpHeaders createIssuerResourceHeaders() {
+    private HttpHeaders createIssuerResourceHeaders(Class<Issuer> clazz) {
         return new HttpHeaders() {
             {
                 String auth = "User" + ":" + "password";
@@ -138,4 +122,19 @@ public class BookService implements IBookService {
     }
 }
 
+//    private boolean hasIssuedBooks(String isbn) {
+//        String objUrl = issuerResourceIsbnUrl + isbn;
+//        ResponseEntity<Issuer> responseEntity = restTemplate.exchange(objUrl, HttpMethod.GET,
+//                new HttpEntity<Issuer>(createIssuerResourceHeaders(Issuer.class)),
+//                Issuer.class);
+//        return (responseEntity != null);
+//    }
+
+//   // private boolean hasIssuances(Book book) {
+//        return true;
+//    }
+
+//    public boolean hasIssuedBooksFallback(String isbn) {
+//        return false;
+//    }
 

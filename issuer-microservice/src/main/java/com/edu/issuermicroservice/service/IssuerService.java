@@ -31,8 +31,8 @@ import java.util.*;
 public class IssuerService implements IIssuerService {
     private final Logger logger = LogManager.getLogger(IssuerService.class);
     public static final String FS = "-";
-    public final String bookResourceUpdateUrl = "http://localhost:8097/books/edit/";
-    public final String bookResourceIsbnUrl = "http://localhost:8097/books/isbn/";
+    public final String bookResourceUpdateUrl = "http://localhost:8097/book/edit/";
+    public final String bookResourceIsbnUrl = "http://localhost:8097/book/isbn/";
     public final String bookResourceIsbnLBUrl = "lb://BOOK-MICROSERVICE/isbn/";
 
     @Autowired
@@ -122,7 +122,7 @@ public class IssuerService implements IIssuerService {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "100")
     })
     public ResponseEntity<Book> fetchBookByIsbn(@PathVariable(value = "isbn") String isbn) {
-        logger.info("http://localhost:8097/books/isbn/" + isbn);
+        logger.info("http://localhost:8097/book/isbn/" + isbn);
         String url = bookResourceIsbnUrl/*bookResourceIsbnLBUrl*/ + isbn;
         ResponseEntity<Book> responseEntity
                 = restTemplate.exchange(url, HttpMethod.GET,

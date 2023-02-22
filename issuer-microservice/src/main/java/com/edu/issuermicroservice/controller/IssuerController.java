@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = {"${app.security.cors.origin}"})
 @Api(value = "Issuer Class", protocols = "http")
-@RequestMapping("/issuers")
+@RequestMapping("/issuer")
 public class IssuerController {
     private static final Logger logger = LogManager.getLogger(IssuerController.class);
     @Autowired

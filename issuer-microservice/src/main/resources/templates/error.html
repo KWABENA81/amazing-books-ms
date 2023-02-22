@@ -5,6 +5,14 @@
   <title>Title - ISSUER Microservice Error</title>
 </head>
 <body>
-<p>Error Page  ISSUER Microservice Error <%= (new java.util.Date()).toLocaleString() %></p>
+  <%
+    String author = request.getParameter("author");
+    if (author != null && !author.equals("")) {
+  %>
+    <p>Error Page  ISSUER Microservice Error <%= author %></p>
+  <%
+    }
+  %>
+<!--  <p>Error Page  ISSUER Microservice Error <%= new java.util.Date() %></p>-->
 </body>
 </html>
