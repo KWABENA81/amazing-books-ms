@@ -75,6 +75,6 @@ public class SwaggerConfig {
                 environment, basePath);
         return new WebMvcEndpointHandlerMapping(endpointMapping, webEndpoints, mediaTypes,
                 corsProperties.toCorsConfiguration(), new EndpointLinksResolver(allEndpoints, basePath),
-                shouldRegisterLinksMapping, null);
+                shouldRegisterLinksMapping/*, null*/);
     }
 }

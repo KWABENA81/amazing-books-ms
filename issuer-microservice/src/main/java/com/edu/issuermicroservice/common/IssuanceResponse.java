@@ -1,7 +1,7 @@
 package com.edu.issuermicroservice.common;
 
 
-import com.edu.issuermicroservice.model.Issuer;
+import com.edu.issuermicroservice.entity.Issuer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

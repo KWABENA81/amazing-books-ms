@@ -4,7 +4,7 @@ package com.edu.issuermicroservice.service;
 import com.edu.issuermicroservice.common.Book;
 import com.edu.issuermicroservice.common.IssuanceRequest;
 import com.edu.issuermicroservice.common.IssuanceResponse;
-import com.edu.issuermicroservice.model.Issuer;
+import com.edu.issuermicroservice.entity.Issuer;
 import com.edu.issuermicroservice.repo.IssuerRepository;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -26,8 +26,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-// @AllArgsConstructor
-// @NoArgsConstructor
 public class IssuerService implements IIssuerService {
     private final Logger logger = LogManager.getLogger(IssuerService.class);
     public static final String FS = "-";

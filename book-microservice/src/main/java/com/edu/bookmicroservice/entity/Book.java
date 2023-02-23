@@ -1,11 +1,15 @@
 package com.edu.bookmicroservice.entity;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Entity;
 import java.time.LocalDate;
 
 @Data
@@ -18,28 +22,16 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NonNull
-    @Column(insertable = true)
     private String isbn = "Ako087DEFAULT";
 
-    @NonNull
-    @Column(insertable = true)
     private String title = "Book Title DEFAULT";
 
-    @NonNull
-    @Column(insertable = true)
     private LocalDate publishedDate = LocalDate.now();
 
-    @NonNull
-    @Column(insertable = true)
     private Integer totalCopies = 111;
 
-    @NonNull
-    @Column(insertable = true)
     private Integer issuedCopies = 1;
 
-    @NonNull
-    @Column(insertable = true)
     private String author = "Main Author";
 
 }

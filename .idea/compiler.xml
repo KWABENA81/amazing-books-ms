@@ -17,10 +17,10 @@
     <bytecodeTargetLevel>
       <module name="api-gateway" target="11" />
       <module name="book-microservice" target="11" />
-      <module name="eureka-service" target="11" />
+      <module name="eureka-service" target="17" />
       <module name="hystrix" target="11" />
       <module name="issuer-microservice" target="11" />
-      <module name="oauth2-service" target="11" />
+      <module name="oauth2-service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

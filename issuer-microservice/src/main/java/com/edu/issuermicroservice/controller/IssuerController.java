@@ -4,7 +4,7 @@ import com.edu.issuermicroservice.common.Book;
 import com.edu.issuermicroservice.common.IssuanceRequest;
 import com.edu.issuermicroservice.common.IssuanceResponse;
 import com.edu.issuermicroservice.exceptions.IssuerNotFoundExceptionResponseStatus;
-import com.edu.issuermicroservice.model.Issuer;
+import com.edu.issuermicroservice.entity.Issuer;
 import com.edu.issuermicroservice.service.IssuerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

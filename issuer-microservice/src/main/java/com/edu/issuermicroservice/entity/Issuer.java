@@ -1,4 +1,5 @@
-package com.edu.issuermicroservice.model;
+package com.edu.issuermicroservice.entity;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+
 
 @Data
 @NoArgsConstructor

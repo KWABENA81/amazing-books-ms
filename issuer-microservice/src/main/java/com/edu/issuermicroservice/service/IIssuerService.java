@@ -1,6 +1,6 @@
 package com.edu.issuermicroservice.service;
 
-import com.edu.issuermicroservice.model.Issuer;
+import com.edu.issuermicroservice.entity.Issuer;
 
 import java.util.Collection;
 import java.util.Optional;

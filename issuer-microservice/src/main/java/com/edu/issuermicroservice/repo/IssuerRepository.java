@@ -1,7 +1,7 @@
 package com.edu.issuermicroservice.repo;
 
 
-import com.edu.issuermicroservice.model.Issuer;
+import com.edu.issuermicroservice.entity.Issuer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

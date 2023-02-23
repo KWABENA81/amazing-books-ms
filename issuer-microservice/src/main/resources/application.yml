@@ -41,10 +41,10 @@ spring:
           apply_to_ddl: true
   security:
     enabled: true
-    user:
-      name: User
-      password: password  # $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
-      roles: USER, ADMIN
+#    user:
+#      name: User
+#      password: password  # $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
+#      roles: USER, ADMIN
     oauth2:
       resource-server:
         jwt:

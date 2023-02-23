@@ -8,12 +8,44 @@ spring:
       context-path: /oauth2
     use-forward-headers: false
 
+  h2:
+    console:
+      enabled: true
+      path: "/h2-console"
+      settings:
+        trace: false
+        web-allow-others: false
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:userInfodb
+    username: sa
+    password: password
+  sql:
+    init:
+      mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    # DDL
+    generate-dll: false
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    open-in-view: true
+    properties:
+      hibernate:
+        format_sql: true
+        validator:
+          apply_to_ddl: true
+
   security:
     enabled: true
-    user:
-      name: User
-      password: $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
-      roles: USER, ADMIN
+#    user:
+#      name: User
+#      password: $2b$12$tcoaaq3PeqkerTb8OS2t5eTBKZFzrnFPJy.s1Fk8OcIZg0aQvUyeq
+#      roles: USER, ADMIN
 
     oauth2:
       resource-server:
